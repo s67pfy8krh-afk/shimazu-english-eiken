@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英検2級 英単語チェック｜島津外語専門塾</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0e2040;
+  --navy2: #162b55;
+  --blue: #2563eb;
+  --blue-light: #3b82f6;
+  --gold: #f0b429;
+  --green: #22c55e;
+  --red: #ef4444;
+  --white: #f8fafc;
+  --gray: #94a3b8;
+  --gray2: #334155;
+  --border: rgba(255,255,255,0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 16px 48px;
+}
+
+/* ===== HEADER ===== */
+header {
+  width: 100%;
+  max-width: 640px;
+  padding: 20px 0 12px;
+  text-align: center;
+}
+.school-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--gray);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.app-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--white);
+  letter-spacing: 0.02em;
+}
+.app-subtitle {
+  font-size: 11px;
+  color: var(--gray);
+  margin-top: 4px;
+  letter-spacing: 0.1em;
+}
+
+/* ===== SCREENS ===== */
+.screen { display: none; width: 100%; max-width: 640px; }
+.screen.active { display: block; }
+
+/* ===== START SCREEN ===== */
+.start-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  margin-top: 12px;
+}
+.badge {
+  display: inline-block;
+  background: rgba(37,99,235,0.25);
+  border: 1px solid var(--blue);
+  color: var(--blue-light);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 4px 12px;
+  border-radius: 99px;
+  margin-bottom: 20px;
+}
+.start-card h2 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.start-card p {
+  font-size: 13px;
+  color: var(--gray);
+  line-height: 1.8;
+  margin-bottom: 24px;
+}
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.info-item {
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 12px 8px;
+}
+.info-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 24px;
+  color: var(--gold);
+  display: block;
+}
+.info-label {
+  font-size: 11px;
+  color: var(--gray);
+  margin-top: 2px;
+  display: block;
+}
+.btn-start {
+  width: 100%;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 15px;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  letter-spacing: 0.05em;
+  transition: background 0.2s;
+}
+.btn-start:hover { background: var(--blue-light); }
+
+/* ===== QUIZ SCREEN ===== */
+.progress-wrap {
+  margin: 16px 0 20px;
+}
+.progress-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.progress-count {
+  font-size: 12px;
+  color: var(--gray);
+  letter-spacing: 0.08em;
+}
+.score-live {
+  font-size: 12px;
+  color: var(--gray);
+}
+.progress-bar-bg {
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--blue);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.question-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 20px;
+  margin-bottom: 14px;
+}
+.q-tag {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--blue-light);
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: block;
+}
+.q-sentence {
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--white);
+  word-break: break-word;
+}
+.blank {
+  display: inline-block;
+  background: rgba(37,99,235,0.2);
+  border-bottom: 2px solid var(--blue);
+  color: var(--blue-light);
+  padding: 0 14px;
+  border-radius: 4px;
+  font-weight: 700;
+  min-width: 80px;
+  text-align: center;
+  letter-spacing: 0.08em;
+}
+.q-translation {
+  font-size: 12px;
+  color: var(--gray);
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  line-height: 1.7;
+}
+
+.options-grid {
+  display: grid;
+  gap: 10px;
+}
+.opt-btn {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  color: var(--white);
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 500;
+  padding: 14px 16px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.opt-btn:hover:not(:disabled) {
+  background: rgba(37,99,235,0.2);
+  border-color: var(--blue);
+}
+.opt-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.08);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.opt-btn.correct {
+  background: rgba(34,197,94,0.15);
+  border-color: var(--green);
+}
+.opt-btn.correct .opt-label {
+  background: var(--green);
+  color: #fff;
+}
+.opt-btn.wrong {
+  background: rgba(239,68,68,0.15);
+  border-color: var(--red);
+}
+.opt-btn.wrong .opt-label {
+  background: var(--red);
+  color: #fff;
+}
+.opt-btn:disabled { cursor: default; }
+
+.feedback-box {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #cbd5e1;
+  display: none;
+}
+.feedback-box.show { display: block; }
+.feedback-box .fb-correct { color: var(--green); font-weight: 700; margin-bottom: 6px; display: block; }
+.feedback-box .fb-wrong { color: var(--red); font-weight: 700; margin-bottom: 6px; display: block; }
+.feedback-box .fb-answer { color: var(--gold); font-weight: 700; }
+.feedback-box .fb-tip { color: #94a3b8; font-size: 12px; margin-top: 6px; display: block; }
+
+.btn-next {
+  width: 100%;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 14px;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  letter-spacing: 0.05em;
+  transition: background 0.2s;
+  margin-top: 12px;
+  display: none;
+}
+.btn-next.show { display: block; }
+.btn-next:hover { background: var(--blue-light); }
+
+/* ===== RESULT SCREEN ===== */
+.result-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  margin-top: 12px;
+}
+.result-rank {
+  font-family: 'DM Serif Display', serif;
+  font-size: 72px;
+  line-height: 1;
+  margin: 12px 0 4px;
+}
+.result-score {
+  font-size: 14px;
+  color: var(--gray);
+  margin-bottom: 20px;
+}
+.rank-label {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 18px;
+  border-radius: 99px;
+  margin-bottom: 20px;
+}
+.meter-wrap {
+  height: 10px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 0 auto 24px;
+  max-width: 300px;
+}
+.meter-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 1s ease;
+}
+.result-comment {
+  font-size: 13px;
+  color: var(--gray);
+  line-height: 1.8;
+  margin-bottom: 28px;
+  text-align: left;
+  padding: 16px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+}
+
+.review-section h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gray);
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+  text-align: left;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.review-item {
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+.review-sentence { font-size: 13px; line-height: 1.8; margin-bottom: 8px; }
+.review-answer {
+  font-size: 12px;
+  color: var(--gold);
+  font-weight: 700;
+}
+.review-wrong {
+  font-size: 12px;
+  color: #ef4444;
+  text-decoration: line-through;
+  margin-right: 8px;
+}
+.review-tip {
+  font-size: 12px;
+  color: var(--gray);
+  margin-top: 6px;
+  line-height: 1.7;
+}
+
+.btn-retry {
+  width: 100%;
+  background: transparent;
+  color: var(--blue-light);
+  border: 1px solid var(--blue);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 14px;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  letter-spacing: 0.05em;
+  margin-top: 20px;
+  transition: background 0.2s;
+}
+.btn-retry:hover { background: rgba(37,99,235,0.15); }
+
+footer {
+  margin-top: 32px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--gray2);
+  letter-spacing: 0.08em;
+  width: 100%;
+  max-width: 640px;
+}
+footer a { color: var(--gray); text-decoration: none; }
+
+.set-num{
+  display:inline-block;
+  font-family:"DM Serif Display",serif;
+  font-size:52px;
+  line-height:1;
+  letter-spacing:.04em;
+  margin:10px 0 4px;
+}
+.set-label{
+  display:inline-block;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.2em;
+  padding:3px 10px;
+  border-radius:99px;
+  margin-bottom:8px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="school-label">島津外語専門塾 — Shimazu English</div>
+  <div class="app-title">Vocabulary Check</div>
+  <div class="app-subtitle">英検2級 英単語チェック</div>
+</header>
+
+<!-- START SCREEN -->
+<div class="screen active" id="screen-start">
+  <div class="start-card">
+    <div class="badge">EIKEN GRADE 2 · B1–B2</div>
+    <h2>英検2級レベルの<br>語彙力を確認しよう</h2>
+    <p>本番と同じ形式（文脈穴埋め）で出題します。<br>全問終了後に解説と正答を確認できます。</p>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-num">30</span>
+        <span class="info-label">問</span>
+      </div>
+      <div class="info-item">
+        <span class="info-num">4</span>
+        <span class="info-label">択</span>
+      </div>
+      <div class="info-item">
+        <span class="info-num">約15</span>
+        <span class="info-label">分</span>
+      </div>
+    </div>
+    <button class="btn-start" onclick="startQuiz()">スタート</button>
+  </div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div class="screen" id="screen-quiz">
+  <div class="progress-wrap">
+    <div class="progress-row">
+      <span class="progress-count" id="progress-count">1 / 30</span>
+      <span class="score-live" id="score-live">正解: 0</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <span class="q-tag" id="q-tag">QUESTION 1</span>
+    <div class="q-sentence" id="q-sentence"></div>
+    <div class="q-translation" id="q-translation"></div>
+  </div>
+
+  <div class="options-grid" id="options-grid"></div>
+
+  <div class="feedback-box" id="feedback-box"></div>
+  <button class="btn-next" id="btn-next" onclick="nextQuestion()">次の問題 →</button>
+</div>
+
+<!-- RESULT SCREEN -->
+<div class="screen" id="screen-result">
+  <div class="result-card">
+    <div class="badge">結果</div>
+    <div class="result-rank" id="result-rank">A</div>
+    <div class="result-score" id="result-score">30問中 27問正解</div>
+    <div class="rank-label" id="rank-label">合格圏内</div>
+    <div class="meter-wrap">
+      <div class="meter-fill" id="meter-fill" style="width:0%"></div>
+    </div>
+    <div class="result-comment" id="result-comment"></div>
+  </div>
+
+  <div class="review-section" id="review-section" style="margin-top:20px;"></div>
+
+  <button class="btn-retry" onclick="restartQuiz()">もう一度挑戦する</button>
+</div>
+
+<footer>
+  <a href="https://shimazu-english.com">shimazu-english.com</a> · 鹿児島中央駅前 · 英語専門塾
+</footer>
+
+<script>
+const QUESTIONS = [
+  {
+    sentence: "Regular physical exercise can greatly ( ) to maintaining good mental health.",
+    blank: "( )",
+    answer: 1,
+    options: ["object", "contribute", "belong", "apply"],
+    translation: "定期的な運動は、良好なメンタルヘルスを維持することに大いに貢献できる。",
+    explanation: "<span class='fb-correct'>✓ 正解：contribute</span>contribute to ～ で「〜に貢献する・寄与する」。英検2級の最重要動詞。contribute to improving〜 のように to の後は動名詞がくることも覚えておこう。",
+    tip: "💡 contribute / contribution は環境・社会系テーマで頻出"
+  },
+  {
+    sentence: "Many elderly people are ( ) to use smartphones because they find the technology confusing.",
+    blank: "( )",
+    answer: 2,
+    options: ["eager", "likely", "reluctant", "willing"],
+    translation: "多くの高齢者はスマートフォンを使いたがらない。テクノロジーが複雑でわかりにくいと感じているからだ。",
+    explanation: "<span class='fb-correct'>✓ 正解：reluctant</span>reluctant to do で「〜することをためらう・したがらない」。because以降の理由「混乱する」とも一致する。eager（熱心に）・willing（喜んで）は正反対。",
+    tip: "💡 reluctant ↔ eager / willing 反意語もセットで"
+  },
+  {
+    sentence: "Getting enough sleep is ( ) for students, as it directly affects their ability to concentrate.",
+    blank: "( )",
+    answer: 2,
+    options: ["optional", "harmful", "crucial", "average"],
+    translation: "集中力に直接影響するため、十分な睡眠をとることは学生にとって非常に重要だ。",
+    explanation: "<span class='fb-correct'>✓ 正解：crucial</span>crucial は「極めて重要な・決定的な」。as以降に理由があるので、そのことを踏まえた強い形容詞が必要。optional（任意の）は意味が逆。essential / vital / critical も同義。",
+    tip: "💡 crucial = essential = vital（超重要系3語）"
+  },
+  {
+    sentence: "It took her years of practice to ( ) her fear of speaking in public.",
+    blank: "( )",
+    answer: 1,
+    options: ["develop", "overcome", "increase", "recognize"],
+    translation: "人前で話すことへの恐怖を克服するのに、彼女は何年もの練習が必要だった。",
+    explanation: "<span class='fb-correct'>✓ 正解：overcome</span>overcome は「〜を乗り越える・克服する」。fear（恐怖）・difficulty（困難）・obstacle（障害）など、ネガティブなものと組み合わせる動詞。",
+    tip: "💡 overcome obstacles / overcome challenges は頻出フレーズ"
+  },
+  {
+    sentence: "More and more companies are trying to use ( ) energy sources to reduce their impact on the environment.",
+    blank: "( )",
+    answer: 3,
+    options: ["artificial", "temporary", "expensive", "sustainable"],
+    translation: "環境への影響を減らすために、持続可能なエネルギー源を使おうとする企業が増えている。",
+    explanation: "<span class='fb-correct'>✓ 正解：sustainable</span>sustainable は「持続可能な」。環境問題のトピックでは sustainable energy / sustainable development が定番。reduce impact on the environment という文脈からも判断できる。",
+    tip: "💡 sustainability（名詞）も覚えておこう"
+  },
+  {
+    sentence: "The doctor tried to ( ) the patient that changing his diet would significantly improve his condition.",
+    blank: "( )",
+    answer: 2,
+    options: ["confuse", "compete", "convince", "confirm"],
+    translation: "医師は、食事を変えれば症状が大幅に改善すると患者を説得しようとした。",
+    explanation: "<span class='fb-correct'>✓ 正解：convince</span>convince + 人 + that〜 で「〜を説得する・納得させる」。persuade とほぼ同義で入れ替え可能。医療・健康系テーマで頻出。",
+    tip: "💡 convince = persuade（説得する）"
+  },
+  {
+    sentence: "The Amazon rainforest is home to an ( ) variety of plants and animals found nowhere else on Earth.",
+    blank: "( )",
+    answer: 3,
+    options: ["limited", "organized", "ancient", "abundant"],
+    translation: "アマゾンの熱帯雨林には、地球上の他のどこにも見られない、豊富な種類の植物や動物が生息している。",
+    explanation: "<span class='fb-correct'>✓ 正解：abundant</span>abundant は「豊富な・たくさんの」。found nowhere else（他のどこにも見られない）という内容から、多様性や豊かさを示す語が適切。",
+    tip: "💡 abundant resources / abundant evidence なども頻出"
+  },
+  {
+    sentence: "She ( ) most of her free time to volunteering at a local hospital after retiring from her job.",
+    blank: "( )",
+    answer: 0,
+    options: ["devotes", "refuses", "wastes", "collects"],
+    translation: "仕事を退職した後、彼女は自由な時間のほとんどを地域の病院でのボランティアに捧げている。",
+    explanation: "<span class='fb-correct'>✓ 正解：devotes</span>devote A to B で「AをBに捧げる・専念させる」。devote time / energy / effort to ～ は英検頻出パターン。",
+    tip: "💡 dedicate も同義（dedicate A to B）"
+  },
+  {
+    sentence: "Wild animals that cannot ( ) to environmental changes are at risk of becoming extinct.",
+    blank: "( )",
+    answer: 0,
+    options: ["adapt", "react", "respond", "oppose"],
+    translation: "環境変化に適応できない野生動物は絶滅の危機にさらされる。",
+    explanation: "<span class='fb-correct'>✓ 正解：adapt</span>adapt to ～ で「〜に適応する」。生物・環境系トピックの定番語。adjust（調整する）とセットで覚えると良い。react to / respond to は「反応する」で意味がやや異なる。",
+    tip: "💡 adapt to changes / adapt to a new environment"
+  },
+  {
+    sentence: "The government launched a new campaign to ( ) healthy eating habits among children.",
+    blank: "( )",
+    answer: 3,
+    options: ["ignore", "reduce", "replace", "promote"],
+    translation: "政府は子どもたちの健康的な食習慣を促進するための新しいキャンペーンを開始した。",
+    explanation: "<span class='fb-correct'>✓ 正解：promote</span>promote は「〜を促進する・奨励する」。launched a campaign to promote ～（〜を促進するためにキャンペーンを始めた）は頻出パターン。",
+    tip: "💡 promote health / promote understanding / promote growth"
+  },
+  {
+    sentence: "If we continue to ignore climate change, the ( ) for future generations could be severe.",
+    blank: "( )",
+    answer: 1,
+    options: ["advantages", "consequences", "opinions", "investments"],
+    translation: "気候変動を無視し続ければ、将来の世代への影響は深刻なものになるかもしれない。",
+    explanation: "<span class='fb-correct'>✓ 正解：consequences</span>consequence は「結果・影響（特にネガティブなもの）」。severe consequences（深刻な影響）は環境問題のトピックで頻出。",
+    tip: "💡 face the consequences（結果を受け入れる）"
+  },
+  {
+    sentence: "There has been a ( ) increase in the number of people working from home since the pandemic.",
+    blank: "( )",
+    answer: 3,
+    options: ["minor", "confusing", "familiar", "significant"],
+    translation: "パンデミック以降、在宅勤務をする人の数が著しく増加している。",
+    explanation: "<span class='fb-correct'>✓ 正解：significant</span>significant は「重要な・著しい・かなりの」。a significant increase / a significant change など、数や変化の大きさを表す名詞の前に置く。",
+    tip: "💡 significant ≒ notable ≒ considerable（同義語グループ）"
+  },
+  {
+    sentence: "The organization was ( ) over 50 years ago with the aim of protecting endangered species worldwide.",
+    blank: "( )",
+    answer: 0,
+    options: ["established", "destroyed", "forgotten", "borrowed"],
+    translation: "その組織は世界中の絶滅危惧種を守ることを目的に50年以上前に設立された。",
+    explanation: "<span class='fb-correct'>✓ 正解：established</span>establish は「〜を設立する・創設する」。was established（設立された）と受動態になっている点もチェック。well-established（確立された）も頻出。",
+    tip: "💡 establish a company / establish a rule / establish a system"
+  },
+  {
+    sentence: "The number of tourists visiting the area has ( ) sharply due to poor weather and high travel costs.",
+    blank: "( )",
+    answer: 2,
+    options: ["risen", "improved", "declined", "gathered"],
+    translation: "悪天候と高い旅費のため、その地域を訪れる観光客数が急激に減少した。",
+    explanation: "<span class='fb-correct'>✓ 正解：declined</span>decline は「減少する・低下する」。due to poor weather（悪天候のために）という原因から、ネガティブな方向への変化が読み取れる。",
+    tip: "💡 decline in numbers / a sharp decline（急激な低下）"
+  },
+  {
+    sentence: "A new species of deep-sea fish ( ) from the latest scientific expedition to the Pacific Ocean.",
+    blank: "( )",
+    answer: 1,
+    options: ["disappeared", "emerged", "escaped", "divided"],
+    translation: "太平洋への最新の科学探検から、深海魚の新種が出現した。",
+    explanation: "<span class='fb-correct'>✓ 正解：emerged</span>emerge は「出現する・現れる」。科学・発見系のトピックで頻出。新しい事実・問題・勢力が「出てくる」ときに使う動詞。",
+    tip: "💡 emerge as a leader / emerging markets（新興市場）"
+  },
+  {
+    sentence: "The charity aims to ( ) the importance of regular health checkups to people in rural areas.",
+    blank: "( )",
+    answer: 0,
+    options: ["demonstrate", "celebrate", "interrupt", "estimate"],
+    translation: "その慈善団体は、農村部の人々に定期健診の重要性を示すことを目的としている。",
+    explanation: "<span class='fb-correct'>✓ 正解：demonstrate</span>demonstrate は「〜を示す・実証する」。demonstrate the importance / demonstrate the effectiveness など、価値・重要性を示す場合に使う。",
+    tip: "💡 demonstrate = show（ただしより公式・説得的なニュアンス）"
+  },
+  {
+    sentence: "Students who wish to apply for the scholarship must ( ) a letter of recommendation from their teacher.",
+    blank: "( )",
+    answer: 2,
+    options: ["replace", "imagine", "obtain", "pretend"],
+    translation: "奨学金に応募したい学生は、教師からの推薦状を取得しなければならない。",
+    explanation: "<span class='fb-correct'>✓ 正解：obtain</span>obtain は「〜を取得する・入手する」。get の改まった表現。obtain a certificate / obtain permission / obtain information などの形で使う。",
+    tip: "💡 obtain = acquire（フォーマルな「得る」）"
+  },
+  {
+    sentence: "The new system is far more ( ) than the old one, saving both time and energy.",
+    blank: "( )",
+    answer: 1,
+    options: ["complicated", "efficient", "dangerous", "expensive"],
+    translation: "新システムは以前のものよりはるかに効率的で、時間とエネルギーの両方を節約できる。",
+    explanation: "<span class='fb-correct'>✓ 正解：efficient</span>efficient は「効率的な」。saving both time and energy（時間とエネルギーの両方を節約する）という結果から、効率性を表す語が入ることがわかる。",
+    tip: "💡 efficient / efficiency（名詞）はビジネス系で頻出"
+  },
+  {
+    sentence: "Regular volunteer work can ( ) participants in many ways, both personally and professionally.",
+    blank: "( )",
+    answer: 0,
+    options: ["benefit", "harm", "limit", "confuse"],
+    translation: "定期的なボランティア活動は、個人的にも仕事上でも、多くの面で参加者に利益をもたらしうる。",
+    explanation: "<span class='fb-correct'>✓ 正解：benefit</span>benefit は動詞で「〜に利益をもたらす・役立つ」。名詞（the benefits of ～）との両方で使えることを確認しておこう。",
+    tip: "💡 benefit from ～（〜から恩恵を受ける）も重要"
+  },
+  {
+    sentence: "Many children in developing countries suffer from ( ) and do not have access to enough food.",
+    blank: "( )",
+    answer: 2,
+    options: ["comfort", "opportunity", "poverty", "satisfaction"],
+    translation: "途上国の多くの子どもたちは貧困に苦しみ、十分な食料を得られない。",
+    explanation: "<span class='fb-correct'>✓ 正解：poverty</span>poverty は「貧困」。社会問題・国際問題系のトピックで最重要名詞の一つ。suffer from poverty（貧困に苦しむ）は定型表現。",
+    tip: "💡 poverty / inequality / discrimination は社会系頻出3語"
+  },
+  {
+    sentence: "The patient's condition improved ( ) over the course of several weeks of treatment.",
+    blank: "( )",
+    answer: 3,
+    options: ["suddenly", "nervously", "heavily", "gradually"],
+    translation: "患者の症状は、数週間の治療を経て徐々に改善していった。",
+    explanation: "<span class='fb-correct'>✓ 正解：gradually</span>gradually は「徐々に・だんだんと」。over the course of several weeks（数週間をかけて）という時間的経過を示す表現と相性が良い。",
+    tip: "💡 gradually ↔ suddenly（突然に）の対比で覚えよう"
+  },
+  {
+    sentence: "It is important to ( ) a healthy work-life balance to avoid burnout.",
+    blank: "( )",
+    answer: 0,
+    options: ["maintain", "disturb", "ignore", "cancel"],
+    translation: "燃え尽き症候群を避けるには、健全なワークライフバランスを維持することが重要だ。",
+    explanation: "<span class='fb-correct'>✓ 正解：maintain</span>maintain は「〜を維持する・保つ」。maintain a balance / maintain a relationship / maintain health など、状態をキープするときに使う。",
+    tip: "💡 maintain healthy habits（健康的な習慣を維持する）"
+  },
+  {
+    sentence: "The committee will ( ) the results of the survey before making their final decision.",
+    blank: "( )",
+    answer: 1,
+    options: ["celebrate", "evaluate", "delete", "memorize"],
+    translation: "委員会は最終決定を下す前に、調査結果を評価するだろう。",
+    explanation: "<span class='fb-correct'>✓ 正解：evaluate</span>evaluate は「〜を評価する・判断する」。assess と同義で使われることが多い。会議・調査・研究系のテーマで頻出。",
+    tip: "💡 evaluate performance / evaluate the effectiveness"
+  },
+  {
+    sentence: "The new medication is not yet ( ) to the general public and requires a doctor's prescription.",
+    blank: "( )",
+    answer: 2,
+    options: ["essential", "reasonable", "available", "familiar"],
+    translation: "その新薬はまだ一般向けに入手できず、医師の処方箋が必要だ。",
+    explanation: "<span class='fb-correct'>✓ 正解：available</span>available は「入手可能な・利用できる」。requires a prescription（処方箋が必要）という限定条件から、まだ一般に入手できないという内容が読み取れる。",
+    tip: "💡 available / availability は医療・商品系で頻出"
+  },
+  {
+    sentence: "The company has taken steps to ( ) its carbon emissions by switching to renewable energy.",
+    blank: "( )",
+    answer: 0,
+    options: ["reduce", "increase", "ignore", "publish"],
+    translation: "その会社は再生可能エネルギーに切り替えることで、炭素排出量を削減する措置を取った。",
+    explanation: "<span class='fb-correct'>✓ 正解：reduce</span>reduce emissions（排出量を削減する）は環境問題の定番表現。by switching to renewable energy（再生可能エネルギーへの切り替えという手段）とも文意が合う。",
+    tip: "💡 reduce / cut / lower（削減する）は環境問題の核心動詞"
+  },
+  {
+    sentence: "Based on ( ) research, scientists have developed a new approach to treating the disease.",
+    blank: "( )",
+    answer: 3,
+    options: ["following", "future", "recent", "previous"],
+    translation: "以前の研究をもとに、科学者たちはその病気の治療に新しいアプローチを開発した。",
+    explanation: "<span class='fb-correct'>✓ 正解：previous</span>previous は「以前の・前の」。based on previous research（以前の研究に基づいて）は科学系テーマの定型フレーズ。",
+    tip: "💡 previous experience / previous studies（以前の経験・研究）"
+  },
+  {
+    sentence: "She worked extremely hard and finally managed to ( ) her dream of becoming a doctor.",
+    blank: "( )",
+    answer: 1,
+    options: ["refuse", "achieve", "lose", "forget"],
+    translation: "彼女は懸命に努力し、ついに医者になるという夢を達成することができた。",
+    explanation: "<span class='fb-correct'>✓ 正解：achieve</span>achieve は「〜を達成する・成し遂げる」。achieve a goal / achieve a dream / achieve success は英検2級で最も頻出の動詞の一つ。",
+    tip: "💡 achievement（名詞）も同時に覚えよう"
+  },
+  {
+    sentence: "It is important to ( ) the signs of stress early so that you can take action before the situation worsens.",
+    blank: "( )",
+    answer: 0,
+    options: ["recognize", "ignore", "increase", "create"],
+    translation: "状況が悪化する前に対処できるよう、ストレスのサインを早期に認識することが重要だ。",
+    explanation: "<span class='fb-correct'>✓ 正解：recognize</span>recognize は「〜を認識する・気づく」。so that you can take action（行動できるように）という目的節から、問題を認識することの重要性が読み取れる。",
+    tip: "💡 recognize the importance of ～（〜の重要性を認識する）"
+  },
+  {
+    sentence: "Many traditional stores have been ( ) by online shopping platforms in recent years.",
+    blank: "( )",
+    answer: 2,
+    options: ["supported", "created", "replaced", "collected"],
+    translation: "近年、多くの伝統的な店舗がオンラインショッピングプラットフォームに取って代わられている。",
+    explanation: "<span class='fb-correct'>✓ 正解：replaced</span>be replaced by ～ で「〜に取って代わられる」。テクノロジーや社会変化のテーマで非常に頻出のパターン。受動態であることに注目。",
+    tip: "💡 replace A with B（AをBに置き換える）もセットで"
+  },
+  {
+    sentence: "The program is designed to ( ) young people with the skills they need to succeed in the workplace.",
+    blank: "( )",
+    answer: 3,
+    options: ["remove", "prevent", "borrow", "provide"],
+    translation: "そのプログラムは、若者が職場で成功するために必要なスキルを提供するために設計されている。",
+    explanation: "<span class='fb-correct'>✓ 正解：provide</span>provide + 人 + with + もの で「〜に…を提供する」。英検の頻出構文。designed to ～（〜するために設計された）も定型表現として覚えておこう。",
+    tip: "💡 provide A with B = supply A with B（AにBを提供する）"
+  }
+];
+
+let currentQ = 0;
+let score = 0;
+let wrongList = [];
+let answered = false;
+
+function startQuiz() {
+  currentQ = 0; score = 0; wrongList = []; answered = false;
+  document.getElementById('screen-start').classList.remove('active');
+  document.getElementById('screen-quiz').classList.add('active');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  const q = QUESTIONS[currentQ];
+  const total = QUESTIONS.length;
+
+  document.getElementById('progress-count').textContent = `${currentQ + 1} / ${total}`;
+  document.getElementById('score-live').textContent = `正解: ${score}`;
+  document.getElementById('progress-bar').style.width = `${(currentQ / total) * 100}%`;
+  document.getElementById('q-tag').textContent = `QUESTION ${currentQ + 1}`;
+
+  // Build sentence with styled blank
+  const sentence = q.sentence.replace('( )', '<span class="blank">(　　　)</span>');
+  document.getElementById('q-sentence').innerHTML = sentence;
+  document.getElementById('q-translation').textContent = q.translation;
+
+  // Options
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  const labels = ['A', 'B', 'C', 'D'];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = `<span class="opt-label">${labels[i]}</span> ${opt}`;
+    btn.onclick = () => selectAnswer(i);
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('feedback-box').classList.remove('show');
+  document.getElementById('feedback-box').innerHTML = '';
+  document.getElementById('btn-next').classList.remove('show');
+  const label = currentQ + 1 === total ? '結果を見る' : '次の問題 →';
+  document.getElementById('btn-next').textContent = label;
+}
+
+function selectAnswer(selected) {
+  if (answered) return;
+  answered = true;
+  const q = QUESTIONS[currentQ];
+  const btns = document.querySelectorAll('.opt-btn');
+
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.answer) btn.classList.add('correct');
+    else if (i === selected && selected !== q.answer) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedback-box');
+  if (selected === q.answer) {
+    score++;
+    document.getElementById('score-live').textContent = `正解: ${score}`;
+    fb.innerHTML = `${q.explanation}<span class='fb-tip'>${q.tip}</span>`;
+  } else {
+    wrongList.push({ q, selected });
+    const selectedWord = q.options[selected];
+    fb.innerHTML = `<span class='fb-wrong'>✗ あなたの答え：${selectedWord}</span>${q.explanation}<span class='fb-tip'>${q.tip}</span>`;
+  }
+  fb.classList.add('show');
+  document.getElementById('btn-next').classList.add('show');
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= QUESTIONS.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('screen-quiz').classList.remove('active');
+  document.getElementById('screen-result').classList.add('active');
+
+  const total = QUESTIONS.length;
+  const pct = Math.round((score / total) * 100);
+
+  // Rank
+  let rank, rankColor, rankBg, comment;
+  if (pct >= 90) {
+    rank = 'S'; rankColor = '#f0b429'; rankBg = 'rgba(240,180,41,0.2)';
+    comment = '英検2級の語彙力は十分です。このまま準1級レベルの語彙強化を目指しましょう。文法・読解・リスニングの総合力をさらに磨いていきましょう。';
+  } else if (pct >= 77) {
+    rank = 'A'; rankColor = '#22c55e'; rankBg = 'rgba(34,197,94,0.2)';
+    comment = '英検2級合格圏内のレベルです。苦手な単語を復習してさらに完成度を高めましょう。間違えた問題の解説をもう一度読み、例文ごと覚えるのが効果的です。';
+  } else if (pct >= 60) {
+    rank = 'B'; rankColor = '#3b82f6'; rankBg = 'rgba(59,130,246,0.2)';
+    comment = 'もう少しで合格レベルです。間違えた単語を中心に、文脈の中で意味を確認しながら覚え直しましょう。英検2級頻出語を一通り見直すことを推奨します。';
+  } else {
+    rank = 'C'; rankColor = '#ef4444'; rankBg = 'rgba(239,68,68,0.2)';
+    comment = '英検2級の語彙強化が必要です。まずパス単2級などを活用して基本語彙を固めましょう。文脈の中でどう使われるかを意識して覚えることが大切です。';
+  }
+
+  document.getElementById('result-rank').textContent = rank;
+  document.getElementById('result-rank').style.color = rankColor;
+  document.getElementById('result-score').textContent = `${total}問中 ${score}問正解（正答率 ${pct}%）`;
+
+  const rl = document.getElementById('rank-label');
+  rl.textContent = rank === 'S' ? '優秀' : rank === 'A' ? '合格圏内' : rank === 'B' ? 'もう少し' : '要強化';
+  rl.style.background = rankBg;
+  rl.style.color = rankColor;
+  rl.style.border = `1px solid ${rankColor}`;
+
+  document.getElementById('result-comment').textContent = comment;
+
+  const fill = document.getElementById('meter-fill');
+  fill.style.background = rankColor;
+  setTimeout(() => { fill.style.width = pct + '%'; }, 100);
+
+  // Wrong answers review
+  const rev = document.getElementById('review-section');
+  if (wrongList.length === 0) {
+    rev.innerHTML = '<div style="text-align:center;color:#22c55e;font-weight:700;padding:20px 0;">🎉 全問正解！素晴らしい！</div>';
+  } else {
+    let html = `<div class="review-section"><h3>✗ 間違えた問題（${wrongList.length}問）</h3>`;
+    wrongList.forEach(({ q, selected }) => {
+      const sentence = q.sentence.replace('( )', `<span class="fb-answer">${q.options[q.answer]}</span>`);
+      html += `<div class="review-item">
+        <div class="review-sentence">${sentence}</div>
+        <div>
+          <span class="review-wrong">${q.options[selected]}</span>
+          <span class="review-answer">✓ ${q.options[q.answer]}</span>
+        </div>
+        <div class="review-tip">${q.tip}</div>
+      </div>`;
+    });
+    html += '</div>';
+    rev.innerHTML = html;
+  }
+}
+
+function restartQuiz() {
+  document.getElementById('screen-result').classList.remove('active');
+  document.getElementById('screen-start').classList.add('active');
+}
+</script>
+</body>
+</html>

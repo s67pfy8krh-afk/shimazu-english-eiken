@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英検2級 名詞チェック｜島津外語専門塾</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0e2040;--navy2:#162b55;--blue:#2563eb;--blue-light:#3b82f6;--gold:#f0b429;--green:#22c55e;--red:#ef4444;--white:#f8fafc;--gray:#94a3b8;--gray2:#334155;--border:rgba(255,255,255,0.1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 16px 48px}
+header{width:100%;max-width:640px;padding:20px 0 12px;text-align:center}
+.school-label{font-size:10px;letter-spacing:.18em;color:var(--gray);text-transform:uppercase;margin-bottom:4px}
+.app-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--white);letter-spacing:.02em}
+.app-subtitle{font-size:11px;color:var(--gray);margin-top:4px;letter-spacing:.1em}
+.screen{display:none;width:100%;max-width:640px}.screen.active{display:block}
+.start-card{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:32px 24px;text-align:center;margin-top:12px}
+.badge{display:inline-block;background:rgba(37,99,235,.25);border:1px solid var(--blue);color:var(--blue-light);font-size:11px;font-weight:700;letter-spacing:.12em;padding:4px 12px;border-radius:99px;margin-bottom:20px}
+.start-card h2{font-size:20px;font-weight:700;line-height:1.5;margin-bottom:12px}
+.start-card p{font-size:13px;color:var(--gray);line-height:1.8;margin-bottom:24px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:28px}
+.info-item{background:rgba(255,255,255,.05);border-radius:10px;padding:12px 8px}
+.info-num{font-family:'DM Serif Display',serif;font-size:24px;color:var(--gold);display:block}
+.info-label{font-size:11px;color:var(--gray);margin-top:2px;display:block}
+.btn-start{width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;padding:15px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;letter-spacing:.05em;transition:background .2s}
+.btn-start:hover{background:var(--blue-light)}
+.progress-wrap{margin:16px 0 20px}
+.progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.progress-count,.score-live{font-size:12px;color:var(--gray);letter-spacing:.08em}
+.progress-bar-bg{height:4px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--blue);border-radius:99px;transition:width .4s ease}
+.question-card{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:24px 20px;margin-bottom:14px}
+.q-tag{font-size:10px;letter-spacing:.15em;color:var(--blue-light);font-weight:700;margin-bottom:10px;display:block}
+.q-sentence{font-size:15px;line-height:1.9;color:var(--white);word-break:break-word}
+.blank{display:inline-block;background:rgba(37,99,235,.2);border-bottom:2px solid var(--blue);color:var(--blue-light);padding:0 14px;border-radius:4px;font-weight:700;min-width:80px;text-align:center;letter-spacing:.08em}
+.q-translation{font-size:12px;color:var(--gray);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);line-height:1.7}
+.options-grid{display:grid;gap:10px}
+.opt-btn{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--white);border-radius:10px;font-size:14px;font-family:'Noto Sans JP',sans-serif;font-weight:500;padding:14px 16px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;transition:background .15s,border-color .15s}
+.opt-btn:hover:not(:disabled){background:rgba(37,99,235,.2);border-color:var(--blue)}
+.opt-label{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:6px;background:rgba(255,255,255,.08);font-size:12px;font-weight:700;flex-shrink:0}
+.opt-btn.correct{background:rgba(34,197,94,.15);border-color:var(--green)}.opt-btn.correct .opt-label{background:var(--green);color:#fff}
+.opt-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--red)}.opt-btn.wrong .opt-label{background:var(--red);color:#fff}
+.opt-btn:disabled{cursor:default}
+.feedback-box{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:12px;font-size:13px;line-height:1.8;color:#cbd5e1;display:none}
+.feedback-box.show{display:block}
+.fb-correct{color:var(--green);font-weight:700;margin-bottom:6px;display:block}
+.fb-wrong{color:var(--red);font-weight:700;margin-bottom:6px;display:block}
+.fb-answer{color:var(--gold);font-weight:700}
+.fb-tip{color:#94a3b8;font-size:12px;margin-top:6px;display:block}
+.btn-next{width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;padding:14px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;letter-spacing:.05em;transition:background .2s;margin-top:12px;display:none}
+.btn-next.show{display:block}.btn-next:hover{background:var(--blue-light)}
+.result-card{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:32px 24px;text-align:center;margin-top:12px}
+.result-rank{font-family:'DM Serif Display',serif;font-size:72px;line-height:1;margin:12px 0 4px}
+.result-score{font-size:14px;color:var(--gray);margin-bottom:20px}
+.rank-label{display:inline-block;font-size:13px;font-weight:700;padding:6px 18px;border-radius:99px;margin-bottom:20px}
+.meter-wrap{height:10px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin:0 auto 24px;max-width:300px}
+.meter-fill{height:100%;border-radius:99px;transition:width 1s ease}
+.result-comment{font-size:13px;color:var(--gray);line-height:1.8;margin-bottom:28px;text-align:left;padding:16px;background:rgba(255,255,255,.04);border-radius:10px}
+.review-section h3{font-size:14px;font-weight:700;color:var(--gray);letter-spacing:.1em;margin-bottom:14px;text-align:left;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.review-item{background:rgba(255,255,255,.04);border-radius:10px;padding:14px;margin-bottom:10px;text-align:left}
+.review-sentence{font-size:13px;line-height:1.8;margin-bottom:8px}
+.review-answer{font-size:12px;color:var(--gold);font-weight:700}
+.review-wrong{font-size:12px;color:#ef4444;text-decoration:line-through;margin-right:8px}
+.review-tip{font-size:12px;color:var(--gray);margin-top:6px;line-height:1.7}
+.btn-retry{width:100%;background:transparent;color:var(--blue-light);border:1px solid var(--blue);border-radius:10px;font-size:14px;font-weight:700;padding:14px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;letter-spacing:.05em;margin-top:20px;transition:background .2s}
+.btn-retry:hover{background:rgba(37,99,235,.15)}
+footer{margin-top:32px;text-align:center;font-size:11px;color:var(--gray2);letter-spacing:.08em;width:100%;max-width:640px}
+footer a{color:var(--gray);text-decoration:none}
+
+.set-num{
+  display:inline-block;
+  font-family:"DM Serif Display",serif;
+  font-size:52px;
+  line-height:1;
+  letter-spacing:.04em;
+  margin:10px 0 4px;
+}
+.set-label{
+  display:inline-block;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.2em;
+  padding:3px 10px;
+  border-radius:99px;
+  margin-bottom:8px;
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="school-label">島津外語専門塾 — Shimazu English</div>
+  <div class="app-title">英検2級 名詞チェック</div>
+  <div class="app-subtitle">EIKEN GRADE 2 · NOUNS · 30問</div>
+</header>
+
+<div class="screen active" id="screen-start">
+  <div class="start-card">
+    <div class="badge">EIKEN GRADE 2 · NOUNS</div>
+    <h2>英検2級 名詞に特化した<br>語彙力チェック</h2>
+    <p>英検2級頻出の名詞30語を文脈で確認します。<br>名詞と一緒に使う動詞・形容詞のパターンも意識して解こう。</p>
+    <div class="info-grid">
+      <div class="info-item"><span class="info-num">30</span><span class="info-label">問</span></div>
+      <div class="info-item"><span class="info-num">4</span><span class="info-label">択</span></div>
+      <div class="info-item"><span class="info-num">約15</span><span class="info-label">分</span></div>
+    </div>
+    <button class="btn-start" onclick="startQuiz()">スタート</button>
+  </div>
+</div>
+
+<div class="screen" id="screen-quiz">
+  <div class="progress-wrap">
+    <div class="progress-row">
+      <span class="progress-count" id="progress-count">1 / 30</span>
+      <span class="score-live" id="score-live">正解: 0</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
+  </div>
+  <div class="question-card">
+    <span class="q-tag" id="q-tag">QUESTION 1</span>
+    <div class="q-sentence" id="q-sentence"></div>
+    <div class="q-translation" id="q-translation"></div>
+  </div>
+  <div class="options-grid" id="options-grid"></div>
+  <div class="feedback-box" id="feedback-box"></div>
+  <button class="btn-next" id="btn-next" onclick="nextQuestion()">次の問題 →</button>
+</div>
+
+<div class="screen" id="screen-result">
+  <div class="result-card">
+    <div class="badge">結果</div>
+    <div class="result-rank" id="result-rank">A</div>
+    <div class="result-score" id="result-score"></div>
+    <div class="rank-label" id="rank-label"></div>
+    <div class="meter-wrap"><div class="meter-fill" id="meter-fill" style="width:0%"></div></div>
+    <div class="result-comment" id="result-comment"></div>
+  </div>
+  <div class="review-section" id="review-section" style="margin-top:20px;"></div>
+  <button class="btn-retry" onclick="restartQuiz()">もう一度挑戦する</button>
+</div>
+
+<footer><a href="https://shimazu-english.com">shimazu-english.com</a> · 鹿児島中央駅前 · 英語専門塾</footer>
+
+<script>
+const Q=[
+  {s:"The charity runs events throughout the year to raise ( ) of the challenges faced by people with disabilities.",a:0,o:["awareness","furniture","silence","weather"],t:"その慈善団体は障がいを持つ人々が直面する困難についての意識を高めるためのイベントを年間通じて開催している。",e:"<span class='fb-correct'>✓ 正解：awareness</span>awareness は「意識・認識」。raise awareness of ～（〜についての意識を高める）は社会系テーマで最頻出フレーズ。",tip:"💡 raise awareness / public awareness / awareness campaign"},
+  {s:"The new factory has had a significant negative ( ) on the water quality in the river near the town.",a:1,o:["silence","impact","furniture","tradition"],t:"新しい工場は町近くの川の水質に大きな悪影響を与えてきた。",e:"<span class='fb-correct'>✓ 正解：impact</span>impact は「影響・衝撃」。have an impact on ～（〜に影響を与える）/ negative impact（悪影響）は頻出フレーズ。",tip:"💡 have a negative / positive impact on ～"},
+  {s:"Living abroad for a year gave her a completely new ( ) on her own country's values and cultural identity.",a:2,o:["silence","tradition","perspective","furniture"],t:"1年間海外に住むことで、彼女は自国の価値観と文化的アイデンティティについての全く新しい視点を得た。",e:"<span class='fb-correct'>✓ 正解：perspective</span>perspective は「視点・見方」。a different perspective（異なる視点）/ gain a new perspective（新しい視点を得る）は頻出。",tip:"💡 from a different perspective（異なる視点から）/ gain a perspective"},
+  {s:"Technological ( ) in the field of medicine has made it possible to treat diseases that were once untreatable.",a:3,o:["silence","furniture","tradition","innovation"],t:"医学分野の技術革新により、かつては治療不可能だった病気を治療することが可能になった。",e:"<span class='fb-correct'>✓ 正解：innovation</span>innovation は「革新・イノベーション」。technological innovation（技術革新）/ drive innovation（革新を推進する）は頻出。",tip:"💡 innovation / innovate（動詞）/ innovative（形容詞）"},
+  {s:"The company actively promotes ( ) in its workforce, believing that varied backgrounds lead to more creative solutions.",a:0,o:["diversity","silence","furniture","weather"],t:"その会社は様々な背景がより創造的な解決策につながると信じて、従業員の多様性を積極的に促進している。",e:"<span class='fb-correct'>✓ 正解：diversity</span>diversity は「多様性」。value diversity（多様性を大切にする）/ cultural diversity（文化的多様性）は頻出。",tip:"💡 diversity / diverse（形容詞）/ promote diversity"},
+  {s:"Failing to address environmental problems today could have very serious ( ) for all future generations.",a:1,o:["weather","consequences","furniture","silence"],t:"今日の環境問題に取り組まないと、将来のすべての世代に非常に深刻な影響をもたらす可能性がある。",e:"<span class='fb-correct'>✓ 正解：consequences</span>consequence は「結果・影響（特にネガティブ）」。face the consequences / serious consequences（深刻な影響）は頻出。",tip:"💡 as a consequence of ～（〜の結果として）/ face the consequences"},
+  {s:"The young athlete showed incredible ( ) by training six days a week for three years to reach the national team.",a:2,o:["furniture","weather","commitment","silence"],t:"その若いアスリートは国家チームに入るために3年間週6日トレーニングを続け、信じられないほどの献身を示した。",e:"<span class='fb-correct'>✓ 正解：commitment</span>commitment は「献身・取り組み」。show commitment（献身を示す）/ a commitment to ～（〜への取り組み）は頻出。",tip:"💡 commitment / commit（動詞）/ make a commitment"},
+  {s:"The ( ) between the two departments over limited budget resources caused significant delays in the main project.",a:3,o:["furniture","weather","silence","conflict"],t:"限られた予算資源をめぐる2つの部署間の対立が、メインプロジェクトに大きな遅延を引き起こした。",e:"<span class='fb-correct'>✓ 正解：conflict</span>conflict は「対立・衝突・紛争」。resolve a conflict（対立を解決する）/ conflict between ～（〜間の対立）は頻出。",tip:"💡 conflict / resolve a conflict / conflict of interest（利益相反）"},
+  {s:"Her outstanding ( ) to the research project was formally recognized with a special award at the conference.",a:0,o:["contribution","weather","silence","furniture"],t:"研究プロジェクトへの彼女の優れた貢献は、会議で特別賞によって正式に認められた。",e:"<span class='fb-correct'>✓ 正解：contribution</span>contribution は「貢献・寄与」。make a contribution（貢献する）/ contribution to ～（〜への貢献）は頻出。",tip:"💡 contribution / contribute（動詞）/ make a contribution to ～"},
+  {s:"International ( ) between governments is absolutely essential for addressing global problems like climate change.",a:1,o:["furniture","cooperation","weather","silence"],t:"気候変動のようなグローバルな問題に取り組むには、政府間の国際的な協力が絶対に不可欠だ。",e:"<span class='fb-correct'>✓ 正解：cooperation</span>cooperation は「協力・協調」。international cooperation / in cooperation with ～（〜と協力して）は頻出。",tip:"💡 cooperation / cooperate（動詞）/ in cooperation with ～"},
+  {s:"One clear ( ) of online learning is that students may find it harder to stay motivated without direct supervision.",a:2,o:["furniture","silence","limitation","weather"],t:"オンライン学習の明らかな限界の一つは、直接の監督なしに意欲を維持することが難しいと感じる学生がいることだ。",e:"<span class='fb-correct'>✓ 正解：limitation</span>limitation は「限界・制限・弱点」。a limitation of ～（〜の限界）/ overcome limitations（限界を克服する）は頻出。",tip:"💡 limitation / limited（形容詞）/ be aware of limitations"},
+  {s:"Strong ( ) is widely considered one of the most crucial factors in achieving any kind of long-term goal.",a:3,o:["weather","furniture","silence","motivation"],t:"強い意欲は、どんな長期的な目標を達成するうえでも最も重要な要素の一つとして広く考えられている。",e:"<span class='fb-correct'>✓ 正解：motivation</span>motivation は「意欲・動機づけ」。increase motivation / lack of motivation（意欲の欠如）は頻出。",tip:"💡 motivation / motivate（動詞）/ motivated（形容詞）"},
+  {s:"The ( ) of the negotiations surprised both sides, as they had expected the process to take much longer.",a:0,o:["outcome","furniture","silence","weather"],t:"交渉の結果は双方を驚かせた。なぜなら彼らはそのプロセスがもっとずっと長くかかると予想していたからだ。",e:"<span class='fb-correct'>✓ 正解：outcome</span>outcome は「結果・成果」。the outcome of ～（〜の結果）/ a positive outcome（良い結果）は頻出。",tip:"💡 outcome = result / achieve a good outcome（良い結果を達成する）"},
+  {s:"For the new administration, addressing unemployment among young people is clearly the top ( ).",a:1,o:["weather","priority","furniture","silence"],t:"新政権にとって、若者の失業問題に対処することが明らかに最優先事項だ。",e:"<span class='fb-correct'>✓ 正解：priority</span>priority は「優先事項・優先順位」。top priority（最優先事項）/ give priority to ～（〜を優先する）は頻出。",tip:"💡 priority / top priority / prioritize（動詞）"},
+  {s:"Schools in rural areas often struggle because they lack the same educational ( ) as schools in major cities.",a:2,o:["silence","weather","resources","furniture"],t:"農村部の学校は主要都市の学校と同じ教育的資源を持っていないため、しばしば苦労する。",e:"<span class='fb-correct'>✓ 正解：resources</span>resource は「資源・手段」。natural resources（天然資源）/ educational resources（教育的資源）/ manage resources（資源を管理する）は頻出。",tip:"💡 resources / natural resources / manage resources"},
+  {s:"The ( ) from working in a small startup to managing a large corporation was far more challenging than he expected.",a:3,o:["weather","furniture","silence","transition"],t:"小さなスタートアップでの勤務から大きな会社の経営への移行は、彼が予想していたよりもはるかに困難だった。",e:"<span class='fb-correct'>✓ 正解：transition</span>transition は「移行・転換」。the transition from A to B（AからBへの移行）/ smooth transition（スムーズな移行）は頻出。",tip:"💡 transition / transition from A to B / a smooth transition"},
+  {s:"There is a clear ( ) among younger workers to prioritize personal wellbeing over salary when choosing a job.",a:0,o:["tendency","weather","furniture","silence"],t:"仕事を選ぶ際に給与よりも個人の幸福を優先する傾向が若い労働者の間に明確にある。",e:"<span class='fb-correct'>✓ 正解：tendency</span>tendency は「傾向」。a tendency to do / a growing tendency（高まる傾向）は社会系テーマで頻出。",tip:"💡 tendency / have a tendency to do（〜する傾向がある）"},
+  {s:"Scientists need strong and reproducible ( ) before they can officially claim that a new drug is truly effective.",a:1,o:["furniture","evidence","weather","silence"],t:"科学者たちは新薬が本当に効果的であると公式に主張する前に、強力で再現可能な証拠が必要だ。",e:"<span class='fb-correct'>✓ 正解：evidence</span>evidence は「証拠・根拠」。strong evidence（強力な証拠）/ evidence that ～（〜という証拠）は学術系テーマで頻出。",tip:"💡 evidence / provide evidence / evidence-based（証拠に基づいた）"},
+  {s:"There is a rapidly growing ( ) for professionals who are skilled in both data analysis and artificial intelligence.",a:2,o:["weather","silence","demand","furniture"],t:"データ分析と人工知能の両方に長けた専門家への急速に高まる需要がある。",e:"<span class='fb-correct'>✓ 正解：demand</span>demand は「需要・要求」。a growing demand for ～（〜への高まる需要）/ supply and demand（需要と供給）は頻出。",tip:"💡 demand / supply and demand / in demand（需要がある）"},
+  {s:"Completing the marathon after months of training was a deeply personal ( ) that she would never forget.",a:3,o:["furniture","weather","silence","achievement"],t:"何か月もの練習の後にマラソンを完走することは、彼女が決して忘れない深く個人的な功績だった。",e:"<span class='fb-correct'>✓ 正解：achievement</span>achievement は「功績・業績・達成」。a great achievement（大きな功績）/ sense of achievement（達成感）は頻出。",tip:"💡 achievement / achieve（動詞）/ sense of achievement"},
+  {s:"We have a moral responsibility to protect the planet not only for ourselves but also for future ( ).",a:0,o:["generations","weather","furniture","silence"],t:"私たちは自分たちのためだけでなく、将来の世代のために地球を守る道義的な責任がある。",e:"<span class='fb-correct'>✓ 正解：generations</span>generation は「世代」。future generations（将来の世代）/ the younger generation（若い世代）は環境・社会系テーマで頻出。",tip:"💡 generation / future generations / generation gap（世代間格差）"},
+  {s:"The new legislation aims to promote ( ) in the workplace by ensuring all employees receive the same pay for the same work.",a:1,o:["weather","equality","furniture","silence"],t:"新しい法律は、全従業員が同じ仕事に対して同じ賃金を受け取れるようにすることで職場の平等を促進することを目指している。",e:"<span class='fb-correct'>✓ 正解：equality</span>equality は「平等」。gender equality（性別平等）/ promote equality（平等を促進する）は頻出。",tip:"💡 equality ↔ inequality（不平等）/ gender equality"},
+  {s:"The school has worked hard to raise its academic ( ) by introducing more demanding courses for motivated students.",a:2,o:["furniture","silence","standard","weather"],t:"学校は意欲的な学生向けにより要求の高いコースを導入することで学術的な基準を引き上げようと努力してきた。",e:"<span class='fb-correct'>✓ 正解：standard</span>standard は「基準・水準」。raise standards（基準を引き上げる）/ living standards（生活水準）/ academic standards（学力水準）は頻出。",tip:"💡 standard / raise the standard / living standards"},
+  {s:"The board of directors developed a clear long-term ( ) to expand the company's operations into new overseas markets.",a:3,o:["silence","weather","furniture","strategy"],t:"取締役会は会社の業務を新しい海外市場に拡大するための明確な長期的戦略を策定した。",e:"<span class='fb-correct'>✓ 正解：strategy</span>strategy は「戦略・方策」。develop a strategy（戦略を策定する）/ long-term strategy（長期的な戦略）は頻出。",tip:"💡 strategy / strategic（形容詞）/ develop a strategy"},
+  {s:"The government introduced new measures to protect the health and ( ) of elderly residents living in care homes.",a:0,o:["welfare","furniture","silence","weather"],t:"政府は介護施設に住む高齢者の健康と福祉を守るための新しい措置を導入した。",e:"<span class='fb-correct'>✓ 正解：welfare</span>welfare は「福祉・幸福」。social welfare（社会福祉）/ child welfare（児童福祉）/ public welfare（公共の福祉）は頻出。",tip:"💡 welfare / social welfare / child welfare"},
+  {s:"Diversity training was introduced to help employees overcome ( ) and develop respect for people from all backgrounds.",a:1,o:["furniture","prejudice","weather","silence"],t:"ダイバーシティトレーニングは、従業員が偏見を克服し、あらゆる背景の人々への尊重を育むのを助けるために導入された。",e:"<span class='fb-correct'>✓ 正解：prejudice</span>prejudice は「偏見・先入観」。racial prejudice（人種的偏見）/ overcome prejudice（偏見を克服する）は社会系テーマで頻出。",tip:"💡 prejudice / overcome prejudice / prejudice against ～（〜への偏見）"},
+  {s:"It is the ( ) of every citizen to report environmental violations to the relevant authorities when they are observed.",a:2,o:["weather","silence","obligation","furniture"],t:"環境違反を目撃した際に関係当局に報告することは、すべての市民の義務だ。",e:"<span class='fb-correct'>✓ 正解：obligation</span>obligation は「義務・責任」。have an obligation to do（〜する義務がある）/ sense of obligation（義務感）は頻出。",tip:"💡 obligation = duty / have an obligation to do"},
+  {s:"The school strongly encourages active ( ) in extracurricular activities to help students develop important life skills.",a:3,o:["furniture","silence","weather","participation"],t:"学校は生徒が重要な人生のスキルを伸ばすのを助けるために、課外活動への積極的な参加を強く奨励している。",e:"<span class='fb-correct'>✓ 正解：participation</span>participation は「参加」。encourage participation（参加を促す）/ active participation（積極的参加）は頻出。",tip:"💡 participation / participate（動詞）/ active participation"},
+  {s:"Universities and research centers are among the key ( ) that drive innovation in science and technology worldwide.",a:0,o:["institutions","weather","furniture","silence"],t:"大学や研究センターは世界中で科学技術における革新を推進する主要な機関の一つだ。",e:"<span class='fb-correct'>✓ 正解：institutions</span>institution は「機関・施設・制度」。educational institution（教育機関）/ research institution（研究機関）は頻出。",tip:"💡 institution / educational institution / financial institution（金融機関）"},
+  {s:"The ancient castle is a vital part of the region's cultural ( ) and draws thousands of visitors every year.",a:1,o:["weather","heritage","furniture","silence"],t:"その古い城は地域の文化的遺産の重要な部分であり、毎年何千人もの訪問者を引き付けている。",e:"<span class='fb-correct'>✓ 正解：heritage</span>heritage は「遺産・文化的財産」。cultural heritage（文化的遺産）/ world heritage（世界遺産）/ preserve heritage（遺産を保護する）は頻出。",tip:"💡 heritage / cultural heritage / World Heritage Site（世界遺産）"}
+];
+
+let cur=0,score=0,wrong=[],ans=false;
+function startQuiz(){cur=0;score=0;wrong=[];ans=false;document.getElementById('screen-start').classList.remove('active');document.getElementById('screen-quiz').classList.add('active');render()}
+function render(){
+  ans=false;const q=Q[cur],t=Q.length;
+  document.getElementById('progress-count').textContent=`${cur+1} / ${t}`;
+  document.getElementById('score-live').textContent=`正解: ${score}`;
+  document.getElementById('progress-bar').style.width=`${(cur/t)*100}%`;
+  document.getElementById('q-tag').textContent=`QUESTION ${cur+1}`;
+  document.getElementById('q-sentence').innerHTML=q.s.replace('( )','<span class="blank">(　　　)</span>');
+  document.getElementById('q-translation').textContent=q.t;
+  const g=document.getElementById('options-grid');g.innerHTML='';
+  ['A','B','C','D'].forEach((l,i)=>{const b=document.createElement('button');b.className='opt-btn';b.innerHTML=`<span class="opt-label">${l}</span> ${q.o[i]}`;b.onclick=()=>pick(i);g.appendChild(b);});
+  document.getElementById('feedback-box').classList.remove('show');document.getElementById('feedback-box').innerHTML='';
+  document.getElementById('btn-next').classList.remove('show');
+  document.getElementById('btn-next').textContent=cur+1===t?'結果を見る':'次の問題 →';
+}
+function pick(sel){
+  if(ans)return;ans=true;const q=Q[cur];
+  document.querySelectorAll('.opt-btn').forEach((b,i)=>{b.disabled=true;if(i===q.a)b.classList.add('correct');else if(i===sel&&sel!==q.a)b.classList.add('wrong');});
+  const fb=document.getElementById('feedback-box');
+  if(sel===q.a){score++;document.getElementById('score-live').textContent=`正解: ${score}`;fb.innerHTML=`${q.e}<span class='fb-tip'>${q.tip}</span>`;}
+  else{wrong.push({q,sel});fb.innerHTML=`<span class='fb-wrong'>✗ あなたの答え：${q.o[sel]}</span>${q.e}<span class='fb-tip'>${q.tip}</span>`;}
+  fb.classList.add('show');document.getElementById('btn-next').classList.add('show');
+}
+function nextQuestion(){cur++;if(cur>=Q.length)result();else render()}
+function result(){
+  document.getElementById('screen-quiz').classList.remove('active');document.getElementById('screen-result').classList.add('active');
+  const t=Q.length,p=Math.round((score/t)*100);
+  let rank,rc,rb,com;
+  if(p>=90){rank='S';rc='#f0b429';rb='rgba(240,180,41,0.2)';com='英検2級の名詞語彙は十分なレベルです。準1級レベルの語彙強化に進みましょう。';}
+  else if(p>=77){rank='A';rc='#22c55e';rb='rgba(34,197,94,0.2)';com='英検2級合格圏内のレベルです。間違えた名詞を例文ごと復習して完成度を高めましょう。';}
+  else if(p>=60){rank='B';rc='#3b82f6';rb='rgba(59,130,246,0.2)';com='もう少しで合格レベルです。名詞と一緒によく使われる動詞・形容詞のパターンを確認しましょう。';}
+  else{rank='C';rc='#ef4444';rb='rgba(239,68,68,0.2)';com='名詞の語彙強化が必要です。パス単2級で頻出名詞を確認し、コロケーションごと覚えることを推奨します。';}
+  document.getElementById('result-rank').textContent=rank;document.getElementById('result-rank').style.color=rc;
+  document.getElementById('result-score').textContent=`${t}問中 ${score}問正解（正答率 ${p}%）`;
+  const rl=document.getElementById('rank-label');
+  rl.textContent=rank==='S'?'優秀':rank==='A'?'合格圏内':rank==='B'?'もう少し':'要強化';
+  rl.style.background=rb;rl.style.color=rc;rl.style.border=`1px solid ${rc}`;
+  document.getElementById('result-comment').textContent=com;
+  const fill=document.getElementById('meter-fill');fill.style.background=rc;setTimeout(()=>{fill.style.width=p+'%'},100);
+  const rev=document.getElementById('review-section');
+  if(!wrong.length){rev.innerHTML='<div style="text-align:center;color:#22c55e;font-weight:700;padding:20px 0;">🎉 全問正解！素晴らしい！</div>';}
+  else{
+    let h=`<div class="review-section"><h3>✗ 間違えた問題（${wrong.length}問）</h3>`;
+    wrong.forEach(({q,sel})=>{const s=q.s.replace('( )',`<span class="fb-answer">${q.o[q.a]}</span>`);h+=`<div class="review-item"><div class="review-sentence">${s}</div><div><span class="review-wrong">${q.o[sel]}</span><span class="review-answer">✓ ${q.o[q.a]}</span></div><div class="review-tip">${q.tip}</div></div>`;});
+    h+='</div>';rev.innerHTML=h;
+  }
+}
+function restartQuiz(){document.getElementById('screen-result').classList.remove('active');document.getElementById('screen-start').classList.add('active')}
+</script>
+</body>
+</html>

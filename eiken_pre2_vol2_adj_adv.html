@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英検準2級 形容詞・副詞チェック Vol.2｜島津外語専門塾</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0e2040;--navy2:#162b55;--blue:#2563eb;--blue-light:#3b82f6;--gold:#f0b429;--green:#22c55e;--red:#ef4444;--white:#f8fafc;--gray:#94a3b8;--gray2:#334155;--border:rgba(255,255,255,0.1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 16px 48px}
+header{width:100%;max-width:640px;padding:20px 0 12px;text-align:center}
+.school-label{font-size:10px;letter-spacing:.18em;color:var(--gray);text-transform:uppercase;margin-bottom:4px}
+.app-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--white);letter-spacing:.02em}
+.app-subtitle{font-size:11px;color:var(--gray);margin-top:4px;letter-spacing:.1em}
+.screen{display:none;width:100%;max-width:640px}
+.screen.active{display:block}
+.start-card{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:32px 24px;text-align:center;margin-top:12px}
+.badge{display:inline-block;background:rgba(37,99,235,.25);border:1px solid var(--blue);color:var(--blue-light);font-size:11px;font-weight:700;letter-spacing:.12em;padding:4px 12px;border-radius:99px;margin-bottom:20px}
+.start-card h2{font-size:20px;font-weight:700;line-height:1.5;margin-bottom:12px}
+.start-card p{font-size:13px;color:var(--gray);line-height:1.8;margin-bottom:24px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:28px}
+.info-item{background:rgba(255,255,255,.05);border-radius:10px;padding:12px 8px}
+.info-num{font-family:'DM Serif Display',serif;font-size:24px;color:var(--gold);display:block}
+.info-label{font-size:11px;color:var(--gray);margin-top:2px;display:block}
+.btn-start{width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;padding:15px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;letter-spacing:.05em;transition:background .2s}
+.btn-start:hover{background:var(--blue-light)}
+.progress-wrap{margin:16px 0 20px}
+.progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.progress-count{font-size:12px;color:var(--gray);letter-spacing:.08em}
+.score-live{font-size:12px;color:var(--gray)}
+.progress-bar-bg{height:4px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--blue);border-radius:99px;transition:width .4s ease}
+.question-card{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:24px 20px;margin-bottom:14px}
+.q-tag{font-size:10px;letter-spacing:.15em;color:var(--blue-light);font-weight:700;margin-bottom:10px;display:block}
+.q-sentence{font-size:15px;line-height:1.9;color:var(--white);word-break:break-word}
+.blank{display:inline-block;background:rgba(37,99,235,.2);border-bottom:2px solid var(--blue);color:var(--blue-light);padding:0 14px;border-radius:4px;font-weight:700;min-width:80px;text-align:center;letter-spacing:.08em}
+.q-translation{font-size:12px;color:var(--gray);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);line-height:1.7}
+.options-grid{display:grid;gap:10px}
+.opt-btn{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--white);border-radius:10px;font-size:14px;font-family:'Noto Sans JP',sans-serif;font-weight:500;padding:14px 16px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;transition:background .15s,border-color .15s}
+.opt-btn:hover:not(:disabled){background:rgba(37,99,235,.2);border-color:var(--blue)}
+.opt-label{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:6px;background:rgba(255,255,255,.08);font-size:12px;font-weight:700;flex-shrink:0;transition:background .15s}
+.opt-btn.correct{background:rgba(34,197,94,.15);border-color:var(--green)}
+.opt-btn.correct .opt-label{background:var(--green);color:#fff}
+.opt-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--red)}
+.opt-btn.wrong .opt-label{background:var(--red);color:#fff}
+.opt-btn:disabled{cursor:default}
+.feedback-box{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:12px;font-size:13px;line-height:1.8;color:#cbd5e1;display:none}
+.feedback-box.show{display:block}
+.feedback-box .fb-correct{color:var(--green);font-weight:700;margin-bottom:6px;display:block}
+.feedback-box .fb-wrong{color:var(--red);font-weight:700;margin-bottom:6px;display:block}
+.feedback-box .fb-answer{color:var(--gold);font-weight:700}
+.feedback-box .fb-tip{color:#94a3b8;font-size:12px;margin-top:6px;display:block}
+.btn-next{width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;padding:14px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;letter-spacing:.05em;transition:background .2s;margin-top:12px;display:none}
+.btn-next.show{display:block}
+.btn-next:hover{background:var(--blue-light)}
+.result-card{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:32px 24px;text-align:center;margin-top:12px}
+.result-rank{font-family:'DM Serif Display',serif;font-size:72px;line-height:1;margin:12px 0 4px}
+.result-score{font-size:14px;color:var(--gray);margin-bottom:20px}
+.rank-label{display:inline-block;font-size:13px;font-weight:700;padding:6px 18px;border-radius:99px;margin-bottom:20px}
+.meter-wrap{height:10px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin:0 auto 24px;max-width:300px}
+.meter-fill{height:100%;border-radius:99px;transition:width 1s ease}
+.result-comment{font-size:13px;color:var(--gray);line-height:1.8;margin-bottom:28px;text-align:left;padding:16px;background:rgba(255,255,255,.04);border-radius:10px}
+.review-section h3{font-size:14px;font-weight:700;color:var(--gray);letter-spacing:.1em;margin-bottom:14px;text-align:left;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.review-item{background:rgba(255,255,255,.04);border-radius:10px;padding:14px;margin-bottom:10px;text-align:left}
+.review-sentence{font-size:13px;line-height:1.8;margin-bottom:8px}
+.review-answer{font-size:12px;color:var(--gold);font-weight:700}
+.review-wrong{font-size:12px;color:#ef4444;text-decoration:line-through;margin-right:8px}
+.review-tip{font-size:12px;color:var(--gray);margin-top:6px;line-height:1.7}
+.btn-retry{width:100%;background:transparent;color:var(--blue-light);border:1px solid var(--blue);border-radius:10px;font-size:14px;font-weight:700;padding:14px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;letter-spacing:.05em;margin-top:20px;transition:background .2s}
+.btn-retry:hover{background:rgba(37,99,235,.15)}
+footer{margin-top:32px;text-align:center;font-size:11px;color:var(--gray2);letter-spacing:.08em;width:100%;max-width:640px}
+footer a{color:var(--gray);text-decoration:none}
+
+.set-num{
+  display:inline-block;
+  font-family:"DM Serif Display",serif;
+  font-size:52px;
+  line-height:1;
+  letter-spacing:.04em;
+  margin:10px 0 4px;
+}
+.set-label{
+  display:inline-block;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.2em;
+  padding:3px 10px;
+  border-radius:99px;
+  margin-bottom:8px;
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="school-label">島津外語専門塾 — Shimazu English</div>
+  <div class="app-title">Vocabulary Check · Vol.2</div>
+  <div class="app-subtitle">英検準2級 形容詞・副詞特化チェック</div>
+</header>
+
+<div class="screen active" id="screen-start">
+  <div class="start-card">
+    <div class="badge">EIKEN PRE-2 · ADJ / ADV</div>
+    <h2>形容詞・副詞に絞った<br>準2級語彙チェック</h2>
+    <p>英検準2級でよく出る形容詞・副詞30語を文脈で確認します。<br>ニュアンスの違いに注意しながら解こう。</p>
+    <div class="info-grid">
+      <div class="info-item"><span class="info-num">30</span><span class="info-label">問</span></div>
+      <div class="info-item"><span class="info-num">4</span><span class="info-label">択</span></div>
+      <div class="info-item"><span class="info-num">約15</span><span class="info-label">分</span></div>
+    </div>
+    <button class="btn-start" onclick="startQuiz()">スタート</button>
+  </div>
+</div>
+
+<div class="screen" id="screen-quiz">
+  <div class="progress-wrap">
+    <div class="progress-row">
+      <span class="progress-count" id="progress-count">1 / 30</span>
+      <span class="score-live" id="score-live">正解: 0</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
+  </div>
+  <div class="question-card">
+    <span class="q-tag" id="q-tag">QUESTION 1</span>
+    <div class="q-sentence" id="q-sentence"></div>
+    <div class="q-translation" id="q-translation"></div>
+  </div>
+  <div class="options-grid" id="options-grid"></div>
+  <div class="feedback-box" id="feedback-box"></div>
+  <button class="btn-next" id="btn-next" onclick="nextQuestion()">次の問題 →</button>
+</div>
+
+<div class="screen" id="screen-result">
+  <div class="result-card">
+    <div class="badge">結果</div>
+    <div class="result-rank" id="result-rank">A</div>
+    <div class="result-score" id="result-score"></div>
+    <div class="rank-label" id="rank-label"></div>
+    <div class="meter-wrap"><div class="meter-fill" id="meter-fill" style="width:0%"></div></div>
+    <div class="result-comment" id="result-comment"></div>
+  </div>
+  <div class="review-section" id="review-section" style="margin-top:20px;"></div>
+  <button class="btn-retry" onclick="restartQuiz()">もう一度挑戦する</button>
+</div>
+
+<footer><a href="https://shimazu-english.com">shimazu-english.com</a> · 鹿児島中央駅前 · 英語専門塾</footer>
+
+<script>
+const QUESTIONS=[
+  {sentence:"The new shopping mall is very ( ) among teenagers because it has a large food court and game center.",blank:"( )",answer:0,options:["popular","ancient","harmful","boring"],translation:"その新しいショッピングモールは、大きなフードコートとゲームセンターがあるため、10代の若者にとても人気がある。",explanation:"<span class='fb-correct'>✓ 正解：popular</span>popular は「人気のある」。popular among ～（〜の間で人気の）の形で覚えよう。",tip:"💡 popular among / popular with（〜の間で人気）"},
+  {sentence:"The shoes are ( ) enough to wear all day without causing any pain in your feet.",blank:"( )",answer:1,options:["dangerous","comfortable","heavy","impossible"],translation:"その靴は足が痛くならないよう、一日中履いていられるほど快適だ。",explanation:"<span class='fb-correct'>✓ 正解：comfortable</span>comfortable は「快適な・心地よい」。feel comfortable（快適に感じる）も重要表現。",tip:"💡 comfortable ↔ uncomfortable（不快な）"},
+  {sentence:"It is ( ) to swim alone in the ocean because strong currents can be unpredictable.",blank:"( )",answer:2,options:["safe","exciting","dangerous","helpful"],translation:"強い潮流は予測できないため、海で一人で泳ぐのは危険だ。",explanation:"<span class='fb-correct'>✓ 正解：dangerous</span>dangerous は「危険な」。It is dangerous to do（〜するのは危険だ）の構文も覚えよう。",tip:"💡 dangerous ↔ safe / It is dangerous to do"},
+  {sentence:"Regular exercise is ( ) for maintaining a healthy weight and reducing the risk of disease.",blank:"( )",answer:3,options:["optional","harmful","boring","necessary"],translation:"定期的な運動は、健康的な体重を維持し病気のリスクを下げるために必要だ。",explanation:"<span class='fb-correct'>✓ 正解：necessary</span>necessary は「必要な」。It is necessary to do / necessary for ～ の形で使う。",tip:"💡 necessary ↔ unnecessary / essential も同義"},
+  {sentence:"The festival celebrates ( ) music and dance styles that have been passed down for hundreds of years.",blank:"( )",answer:0,options:["traditional","modern","boring","foreign"],translation:"そのフェスティバルは、何百年もの間受け継がれてきた伝統的な音楽とダンスのスタイルを祝うものだ。",explanation:"<span class='fb-correct'>✓ 正解：traditional</span>traditional は「伝統的な」。文化・歴史テーマで最頻出の形容詞。",tip:"💡 traditional culture / traditional values（伝統的な価値観）"},
+  {sentence:"The volunteer group was ( ) in teaching elderly residents how to use smartphones.",blank:"( )",answer:1,options:["useless","helpful","dangerous","boring"],translation:"そのボランティアグループは高齢の住民にスマートフォンの使い方を教えるうえでとても役立った。",explanation:"<span class='fb-correct'>✓ 正解：helpful</span>helpful は「役立つ・助けになる」。be helpful in doing（〜するのに役立つ）の形も覚えよう。",tip:"💡 helpful ↔ useless / be helpful to 人（人の役に立つ）"},
+  {sentence:"It is ( ) to finish this project in one day; it will take at least a week.",blank:"( )",answer:2,options:["easy","certain","impossible","helpful"],translation:"このプロジェクトを1日で終わらせるのは不可能だ。少なくとも1週間はかかるだろう。",explanation:"<span class='fb-correct'>✓ 正解：impossible</span>impossible は「不可能な」。It is impossible to do の構文で使う。",tip:"💡 impossible ↔ possible / It is impossible to do"},
+  {sentence:"The children were ( ) about going to the theme park for the first time.",blank:"( )",answer:3,options:["bored","worried","tired","excited"],translation:"子どもたちは初めてテーマパークに行くのでわくわくしていた。",explanation:"<span class='fb-correct'>✓ 正解：excited</span>excited は「わくわくした・興奮した」。be excited about ～ の形で使う。exciting（興奮させる）との区別も重要。",tip:"💡 excited（人が）↔ exciting（物が）の形容詞区別"},
+  {sentence:"He felt ( ) before his speech because he had never spoken in front of such a large audience.",blank:"( )",answer:0,options:["nervous","bored","lazy","happy"],translation:"これほど大きな聴衆の前で話したことがなかったため、彼はスピーチの前に緊張した。",explanation:"<span class='fb-correct'>✓ 正解：nervous</span>nervous は「緊張した・不安な」。feel nervous about ～（〜について緊張する）の形が頻出。",tip:"💡 nervous ↔ confident（自信のある）"},
+  {sentence:"It is ( ) for people to feel tired after working long hours without taking a break.",blank:"( )",answer:1,options:["strange","common","impossible","dangerous"],translation:"休憩なしに長時間働いた後に疲れを感じるのは一般的なことだ。",explanation:"<span class='fb-correct'>✓ 正解：common</span>common は「一般的な・よくある」。It is common for 人 to do（人が〜するのはよくある）の構文で使う。",tip:"💡 common ↔ rare（まれな）"},
+  {sentence:"She studied very hard and ( ) passed the exam after three attempts.",blank:"( )",answer:2,options:["suddenly","never","finally","often"],translation:"彼女は一生懸命勉強し、3度目の挑戦でついに試験に合格した。",explanation:"<span class='fb-correct'>✓ 正解：finally</span>finally は「ついに・最終的に」。after several attempts（何度かの挑戦の後）という文脈と合う。",tip:"💡 finally = at last（ついに）"},
+  {sentence:"The weather forecast says it will ( ) rain tomorrow, so you should bring an umbrella.",blank:"( )",answer:0,options:["probably","never","already","rarely"],translation:"天気予報では明日は雨が降りそうだと言っているので、傘を持っていくべきだ。",explanation:"<span class='fb-correct'>✓ 正解：probably</span>probably は「おそらく・たぶん」。可能性が高いが確実ではないときに使う副詞。",tip:"💡 probably（80%程度）> maybe / perhaps（50%程度）"},
+  {sentence:"Please read the contract ( ) before you sign it to make sure you understand everything.",blank:"( )",answer:3,options:["lazily","quickly","poorly","carefully"],translation:"署名する前に、すべてを理解していることを確認するために、契約書をよく読んでください。",explanation:"<span class='fb-correct'>✓ 正解：carefully</span>carefully は「注意深く・丁寧に」。read carefully（注意深く読む）は定番の副詞用法。",tip:"💡 carefully / slowly / clearly（丁寧さを示す副詞）"},
+  {sentence:"The earthquake struck ( ) in the middle of the night, waking everyone in the neighborhood.",blank:"( )",answer:1,options:["slowly","suddenly","gradually","quietly"],translation:"地震は真夜中に突然起き、近所の全員を目覚めさせた。",explanation:"<span class='fb-correct'>✓ 正解：suddenly</span>suddenly は「突然・急に」。in the middle of the night（真夜中に）という状況と自然につながる。",tip:"💡 suddenly ↔ gradually（徐々に）"},
+  {sentence:"The concert tickets sold out ( ) immediately after they went on sale online.",blank:"( )",answer:2,options:["rarely","slowly","nearly","carefully"],translation:"コンサートのチケットはオンラインで発売されるやいなや、ほぼ即座に完売した。",explanation:"<span class='fb-correct'>✓ 正解：nearly</span>nearly は「ほぼ・もう少しで」。nearly immediately（ほぼ即座に）と副詞を修飾する形。",tip:"💡 nearly = almost（ほぼ・ほとんど）"},
+  {sentence:"I have ( ) finished packing, but I still need to find my passport.",blank:"( )",answer:0,options:["already","never","slowly","rarely"],translation:"荷造りはほぼ終わったが、パスポートをまだ見つけなければならない。",explanation:"<span class='fb-correct'>✓ 正解：already</span>already は「すでに・もう」。現在完了形（have finished）と一緒によく使われる。",tip:"💡 already（すでに）/ yet（まだ〜ない）/ still（まだ）"},
+  {sentence:"The rescue team acted ( ) when they received news of the accident, arriving within minutes.",blank:"( )",answer:1,options:["lazily","quickly","slowly","calmly"],translation:"救助チームは事故の知らせを受けるとすぐに行動し、数分以内に到着した。",explanation:"<span class='fb-correct'>✓ 正解：quickly</span>quickly は「素早く・すぐに」。arriving within minutes（数分以内に到着）とも意味が一致する。",tip:"💡 quickly = rapidly（素早く）"},
+  {sentence:"She ( ) forgets to bring her lunch to school, so her parents remind her every morning.",blank:"( )",answer:3,options:["never","rarely","once","usually"],translation:"彼女はいつもお弁当を学校に忘れてしまうので、両親は毎朝彼女に思い出させる。",explanation:"<span class='fb-correct'>✓ 正解：usually</span>usually は「いつも・普通は」。her parents remind her every morning（毎朝思い出させる）という習慣の文脈に合う。",tip:"💡 usually（たいていは）/ always / sometimes / rarely"},
+  {sentence:"The instructions were written ( ), so even a beginner could understand them.",blank:"( )",answer:2,options:["complicatedly","dangerously","simply","quietly"],translation:"説明は分かりやすく書かれていたので、初心者でも理解できた。",explanation:"<span class='fb-correct'>✓ 正解：simply</span>simply は「シンプルに・わかりやすく」。written simply（わかりやすく書かれた）という文脈に合う。",tip:"💡 simply = clearly / in a simple way"},
+  {sentence:"The speaker explained the topic ( ) so that everyone in the room could follow along.",blank:"( )",answer:0,options:["clearly","lazily","rarely","poorly"],translation:"スピーカーはその場の全員がついていけるよう、トピックをわかりやすく説明した。",explanation:"<span class='fb-correct'>✓ 正解：clearly</span>clearly は「明確に・はっきりと」。explain clearly（はっきりと説明する）は定番の組み合わせ。",tip:"💡 clearly = in a clear way / speak clearly"},
+  {sentence:"The scientists discovered a ( ) hot spring in the mountains that had never been recorded before.",blank:"( )",answer:1,options:["boring","natural","artificial","harmful"],translation:"科学者たちは、これまで記録されたことのない天然の温泉を山の中で発見した。",explanation:"<span class='fb-correct'>✓ 正解：natural</span>natural は「自然の・天然の」。had never been recorded before（かつて記録されたことがない）という発見の文脈に合う。",tip:"💡 natural ↔ artificial（人工的な）"},
+  {sentence:"This is the ( ) opportunity to practice your English with a native speaker.",blank:"( )",answer:3,options:["worst","boring","poor","perfect"],translation:"これはネイティブスピーカーと英語を練習する絶好の機会だ。",explanation:"<span class='fb-correct'>✓ 正解：perfect</span>perfect は「完璧な・最適な」。a perfect opportunity（絶好の機会）は定番フレーズ。",tip:"💡 a perfect opportunity / a perfect example"},
+  {sentence:"It is ( ) that all passengers wear seatbelts while the vehicle is in motion.",blank:"( )",answer:2,options:["optional","boring","important","harmful"],translation:"乗り物が動いている間はすべての乗客がシートベルトを着用することが重要だ。",explanation:"<span class='fb-correct'>✓ 正解：important</span>important は「重要な」。It is important that ～ / It is important to do の構文で使う。",tip:"💡 important = essential / crucial（重要さの度合いに応じて使い分ける）"},
+  {sentence:"The students were ( ) when they heard they had all passed the national exam.",blank:"( )",answer:0,options:["surprised","nervous","bored","angry"],translation:"全員が全国試験に合格したと聞いて、生徒たちは驚いた。",explanation:"<span class='fb-correct'>✓ 正解：surprised</span>surprised は「驚いた」。be surprised to do / be surprised that ～ の構文で使う。",tip:"💡 surprised（人が）↔ surprising（物が）の形容詞区別"},
+  {sentence:"The project was ( ) finished before the deadline, leaving no tasks remaining.",blank:"( )",answer:1,options:["partly","completely","slowly","rarely"],translation:"そのプロジェクトは締め切り前に完全に終了し、残っているタスクはなかった。",explanation:"<span class='fb-correct'>✓ 正解：completely</span>completely は「完全に・すっかり」。no tasks remaining（残タスクなし）という文脈に合う。",tip:"💡 completely = entirely / fully（完全に）"},
+  {sentence:"The baby slept ( ) through the night without waking up once.",blank:"( )",answer:3,options:["loudly","nervously","quickly","quietly"],translation:"赤ちゃんは一度も目を覚まさず、静かに一晩中眠った。",explanation:"<span class='fb-correct'>✓ 正解：quietly</span>quietly は「静かに・音を立てずに」。slept quietly（静かに眠った）と自然に合う。",tip:"💡 quietly ↔ noisily / loudly（騒がしく）"},
+  {sentence:"The temperature outside is ( ) cold today, so you should wear several layers of clothing.",blank:"( )",answer:2,options:["slightly","normally","extremely","rarely"],translation:"今日は外がとても寒いので、何枚か重ね着をした方がいい。",explanation:"<span class='fb-correct'>✓ 正解：extremely</span>extremely は「非常に・極めて」。so you should wear several layers（重ね着すべき）という結果とも意味が一致。",tip:"💡 extremely = very（程度が非常に強い）"},
+  {sentence:"Scientists have ( ) discovered a new method that could help treat the disease more effectively.",blank:"( )",answer:0,options:["recently","never","rarely","slowly"],translation:"科学者たちはその病気をより効果的に治療するのに役立つ新しい方法を最近発見した。",explanation:"<span class='fb-correct'>✓ 正解：recently</span>recently は「最近・近ごろ」。have discovered（現在完了）と組み合わさる副詞として頻出。",tip:"💡 recently / lately（最近）は現在完了とセット"},
+  {sentence:"When the fire alarm went off, everyone left the building ( ) and gathered outside.",blank:"( )",answer:1,options:["slowly","immediately","rarely","lazily"],translation:"火災報知器が鳴ったとき、全員がすぐに建物から出て外に集まった。",explanation:"<span class='fb-correct'>✓ 正解：immediately</span>immediately は「すぐに・ただちに」。緊急事態に対する素早い行動を表す副詞。",tip:"💡 immediately = right away / at once（すぐに）"},
+  {sentence:"Students who ( ) participate in class discussions tend to improve their English skills faster.",blank:"( )",answer:3,options:["rarely","quietly","nervously","actively"],translation:"授業中の議論に積極的に参加する生徒は英語力が速く向上する傾向がある。",explanation:"<span class='fb-correct'>✓ 正解：actively</span>actively は「積極的に」。participate actively（積極的に参加する）は教育・学習テーマで頻出。",tip:"💡 actively ↔ passively（受け身に）/ active participation"}
+];
+
+let currentQ=0,score=0,wrongList=[],answered=false;
+function startQuiz(){currentQ=0;score=0;wrongList=[];answered=false;document.getElementById('screen-start').classList.remove('active');document.getElementById('screen-quiz').classList.add('active');renderQuestion()}
+function renderQuestion(){
+  answered=false;const q=QUESTIONS[currentQ],total=QUESTIONS.length;
+  document.getElementById('progress-count').textContent=`${currentQ+1} / ${total}`;
+  document.getElementById('score-live').textContent=`正解: ${score}`;
+  document.getElementById('progress-bar').style.width=`${(currentQ/total)*100}%`;
+  document.getElementById('q-tag').textContent=`QUESTION ${currentQ+1}`;
+  document.getElementById('q-sentence').innerHTML=q.sentence.replace('( )','<span class="blank">(　　　)</span>');
+  document.getElementById('q-translation').textContent=q.translation;
+  const grid=document.getElementById('options-grid');grid.innerHTML='';
+  ['A','B','C','D'].forEach((label,i)=>{const btn=document.createElement('button');btn.className='opt-btn';btn.innerHTML=`<span class="opt-label">${label}</span> ${q.options[i]}`;btn.onclick=()=>selectAnswer(i);grid.appendChild(btn);});
+  document.getElementById('feedback-box').classList.remove('show');document.getElementById('feedback-box').innerHTML='';
+  document.getElementById('btn-next').classList.remove('show');document.getElementById('btn-next').textContent=currentQ+1===total?'結果を見る':'次の問題 →';
+}
+function selectAnswer(selected){
+  if(answered)return;answered=true;const q=QUESTIONS[currentQ];
+  document.querySelectorAll('.opt-btn').forEach((btn,i)=>{btn.disabled=true;if(i===q.answer)btn.classList.add('correct');else if(i===selected&&selected!==q.answer)btn.classList.add('wrong');});
+  const fb=document.getElementById('feedback-box');
+  if(selected===q.answer){score++;document.getElementById('score-live').textContent=`正解: ${score}`;fb.innerHTML=`${q.explanation}<span class='fb-tip'>${q.tip}</span>`;}
+  else{wrongList.push({q,selected});fb.innerHTML=`<span class='fb-wrong'>✗ あなたの答え：${q.options[selected]}</span>${q.explanation}<span class='fb-tip'>${q.tip}</span>`;}
+  fb.classList.add('show');document.getElementById('btn-next').classList.add('show');
+}
+function nextQuestion(){currentQ++;if(currentQ>=QUESTIONS.length)showResult();else renderQuestion()}
+function showResult(){
+  document.getElementById('screen-quiz').classList.remove('active');document.getElementById('screen-result').classList.add('active');
+  const total=QUESTIONS.length,pct=Math.round((score/total)*100);
+  let rank,rankColor,rankBg,comment;
+  if(pct>=90){rank='S';rankColor='#f0b429';rankBg='rgba(240,180,41,0.2)';comment='準2級の形容詞・副詞語彙は十分なレベルです。2級レベルの語彙強化に進みましょう。';}
+  else if(pct>=77){rank='A';rankColor='#22c55e';rankBg='rgba(34,197,94,0.2)';comment='準2級合格圏内のレベルです。間違えた形容詞・副詞を例文ごと復習して完成度を高めましょう。';}
+  else if(pct>=60){rank='B';rankColor='#3b82f6';rankBg='rgba(59,130,246,0.2)';comment='もう少しで合格レベルです。特に紛らわしいニュアンスの違いを意識して覚え直しましょう。';}
+  else{rank='C';rankColor='#ef4444';rankBg='rgba(239,68,68,0.2)';comment='形容詞・副詞の語彙強化が必要です。似た意味の語を比較しながら覚えることを推奨します。';}
+  document.getElementById('result-rank').textContent=rank;document.getElementById('result-rank').style.color=rankColor;
+  document.getElementById('result-score').textContent=`${total}問中 ${score}問正解（正答率 ${pct}%）`;
+  const rl=document.getElementById('rank-label');rl.textContent=rank==='S'?'優秀':rank==='A'?'合格圏内':rank==='B'?'もう少し':'要強化';
+  rl.style.background=rankBg;rl.style.color=rankColor;rl.style.border=`1px solid ${rankColor}`;
+  document.getElementById('result-comment').textContent=comment;
+  const fill=document.getElementById('meter-fill');fill.style.background=rankColor;setTimeout(()=>{fill.style.width=pct+'%'},100);
+  const rev=document.getElementById('review-section');
+  if(wrongList.length===0){rev.innerHTML='<div style="text-align:center;color:#22c55e;font-weight:700;padding:20px 0;">🎉 全問正解！素晴らしい！</div>';}
+  else{let html=`<div class="review-section"><h3>✗ 間違えた問題（${wrongList.length}問）</h3>`;wrongList.forEach(({q,selected})=>{const sent=q.sentence.replace('( )',`<span class="fb-answer">${q.options[q.answer]}</span>`);html+=`<div class="review-item"><div class="review-sentence">${sent}</div><div><span class="review-wrong">${q.options[selected]}</span><span class="review-answer">✓ ${q.options[q.answer]}</span></div><div class="review-tip">${q.tip}</div></div>`;});html+='</div>';rev.innerHTML=html;}
+}
+function restartQuiz(){document.getElementById('screen-result').classList.remove('active');document.getElementById('screen-start').classList.add('active')}
+</script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英検2級 形容詞・副詞チェック｜島津外語専門塾</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0e2040;--navy2:#162b55;--blue:#2563eb;--blue-light:#3b82f6;--gold:#f0b429;--green:#22c55e;--red:#ef4444;--white:#f8fafc;--gray:#94a3b8;--gray2:#334155;--border:rgba(255,255,255,0.1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 16px 48px}
+header{width:100%;max-width:640px;padding:20px 0 12px;text-align:center}
+.school-label{font-size:10px;letter-spacing:.18em;color:var(--gray);text-transform:uppercase;margin-bottom:4px}
+.app-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--white);letter-spacing:.02em}
+.app-subtitle{font-size:11px;color:var(--gray);margin-top:4px;letter-spacing:.1em}
+.screen{display:none;width:100%;max-width:640px}.screen.active{display:block}
+.start-card{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:32px 24px;text-align:center;margin-top:12px}
+.badge{display:inline-block;background:rgba(37,99,235,.25);border:1px solid var(--blue);color:var(--blue-light);font-size:11px;font-weight:700;letter-spacing:.12em;padding:4px 12px;border-radius:99px;margin-bottom:20px}
+.start-card h2{font-size:20px;font-weight:700;line-height:1.5;margin-bottom:12px}
+.start-card p{font-size:13px;color:var(--gray);line-height:1.8;margin-bottom:24px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:28px}
+.info-item{background:rgba(255,255,255,.05);border-radius:10px;padding:12px 8px}
+.info-num{font-family:'DM Serif Display',serif;font-size:24px;color:var(--gold);display:block}
+.info-label{font-size:11px;color:var(--gray);margin-top:2px;display:block}
+.btn-start{width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;padding:15px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;letter-spacing:.05em;transition:background .2s}
+.btn-start:hover{background:var(--blue-light)}
+.progress-wrap{margin:16px 0 20px}
+.progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.progress-count,.score-live{font-size:12px;color:var(--gray);letter-spacing:.08em}
+.progress-bar-bg{height:4px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--blue);border-radius:99px;transition:width .4s ease}
+.question-card{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:24px 20px;margin-bottom:14px}
+.q-tag{font-size:10px;letter-spacing:.15em;color:var(--blue-light);font-weight:700;margin-bottom:10px;display:block}
+.q-sentence{font-size:15px;line-height:1.9;color:var(--white);word-break:break-word}
+.blank{display:inline-block;background:rgba(37,99,235,.2);border-bottom:2px solid var(--blue);color:var(--blue-light);padding:0 14px;border-radius:4px;font-weight:700;min-width:80px;text-align:center;letter-spacing:.08em}
+.q-translation{font-size:12px;color:var(--gray);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);line-height:1.7}
+.options-grid{display:grid;gap:10px}
+.opt-btn{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--white);border-radius:10px;font-size:14px;font-family:'Noto Sans JP',sans-serif;font-weight:500;padding:14px 16px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;transition:background .15s,border-color .15s}
+.opt-btn:hover:not(:disabled){background:rgba(37,99,235,.2);border-color:var(--blue)}
+.opt-label{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:6px;background:rgba(255,255,255,.08);font-size:12px;font-weight:700;flex-shrink:0}
+.opt-btn.correct{background:rgba(34,197,94,.15);border-color:var(--green)}.opt-btn.correct .opt-label{background:var(--green);color:#fff}
+.opt-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--red)}.opt-btn.wrong .opt-label{background:var(--red);color:#fff}
+.opt-btn:disabled{cursor:default}
+.feedback-box{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:12px;font-size:13px;line-height:1.8;color:#cbd5e1;display:none}
+.feedback-box.show{display:block}
+.fb-correct{color:var(--green);font-weight:700;margin-bottom:6px;display:block}
+.fb-wrong{color:var(--red);font-weight:700;margin-bottom:6px;display:block}
+.fb-answer{color:var(--gold);font-weight:700}
+.fb-tip{color:#94a3b8;font-size:12px;margin-top:6px;display:block}
+.btn-next{width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;padding:14px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;letter-spacing:.05em;transition:background .2s;margin-top:12px;display:none}
+.btn-next.show{display:block}.btn-next:hover{background:var(--blue-light)}
+.result-card{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:32px 24px;text-align:center;margin-top:12px}
+.result-rank{font-family:'DM Serif Display',serif;font-size:72px;line-height:1;margin:12px 0 4px}
+.result-score{font-size:14px;color:var(--gray);margin-bottom:20px}
+.rank-label{display:inline-block;font-size:13px;font-weight:700;padding:6px 18px;border-radius:99px;margin-bottom:20px}
+.meter-wrap{height:10px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin:0 auto 24px;max-width:300px}
+.meter-fill{height:100%;border-radius:99px;transition:width 1s ease}
+.result-comment{font-size:13px;color:var(--gray);line-height:1.8;margin-bottom:28px;text-align:left;padding:16px;background:rgba(255,255,255,.04);border-radius:10px}
+.review-section h3{font-size:14px;font-weight:700;color:var(--gray);letter-spacing:.1em;margin-bottom:14px;text-align:left;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.review-item{background:rgba(255,255,255,.04);border-radius:10px;padding:14px;margin-bottom:10px;text-align:left}
+.review-sentence{font-size:13px;line-height:1.8;margin-bottom:8px}
+.review-answer{font-size:12px;color:var(--gold);font-weight:700}
+.review-wrong{font-size:12px;color:#ef4444;text-decoration:line-through;margin-right:8px}
+.review-tip{font-size:12px;color:var(--gray);margin-top:6px;line-height:1.7}
+.btn-retry{width:100%;background:transparent;color:var(--blue-light);border:1px solid var(--blue);border-radius:10px;font-size:14px;font-weight:700;padding:14px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;letter-spacing:.05em;margin-top:20px;transition:background .2s}
+.btn-retry:hover{background:rgba(37,99,235,.15)}
+footer{margin-top:32px;text-align:center;font-size:11px;color:var(--gray2);letter-spacing:.08em;width:100%;max-width:640px}
+footer a{color:var(--gray);text-decoration:none}
+
+.set-num{
+  display:inline-block;
+  font-family:"DM Serif Display",serif;
+  font-size:52px;
+  line-height:1;
+  letter-spacing:.04em;
+  margin:10px 0 4px;
+}
+.set-label{
+  display:inline-block;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.2em;
+  padding:3px 10px;
+  border-radius:99px;
+  margin-bottom:8px;
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="school-label">島津外語専門塾 — Shimazu English</div>
+  <div class="app-title">英検2級 形容詞・副詞チェック</div>
+  <div class="app-subtitle">EIKEN GRADE 2 · ADJ / ADV · 30問</div>
+</header>
+
+<div class="screen active" id="screen-start">
+  <div class="start-card">
+    <div class="badge">EIKEN GRADE 2 · ADJ / ADV</div>
+    <h2>英検2級 形容詞・副詞に特化した<br>語彙力チェック</h2>
+    <p>英検2級頻出の形容詞・副詞30語を文脈で確認します。<br>似た意味の語のニュアンスの違いに注意して解こう。</p>
+    <div class="info-grid">
+      <div class="info-item"><span class="info-num">30</span><span class="info-label">問</span></div>
+      <div class="info-item"><span class="info-num">4</span><span class="info-label">択</span></div>
+      <div class="info-item"><span class="info-num">約15</span><span class="info-label">分</span></div>
+    </div>
+    <button class="btn-start" onclick="startQuiz()">スタート</button>
+  </div>
+</div>
+
+<div class="screen" id="screen-quiz">
+  <div class="progress-wrap">
+    <div class="progress-row">
+      <span class="progress-count" id="progress-count">1 / 30</span>
+      <span class="score-live" id="score-live">正解: 0</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
+  </div>
+  <div class="question-card">
+    <span class="q-tag" id="q-tag">QUESTION 1</span>
+    <div class="q-sentence" id="q-sentence"></div>
+    <div class="q-translation" id="q-translation"></div>
+  </div>
+  <div class="options-grid" id="options-grid"></div>
+  <div class="feedback-box" id="feedback-box"></div>
+  <button class="btn-next" id="btn-next" onclick="nextQuestion()">次の問題 →</button>
+</div>
+
+<div class="screen" id="screen-result">
+  <div class="result-card">
+    <div class="badge">結果</div>
+    <div class="result-rank" id="result-rank">A</div>
+    <div class="result-score" id="result-score"></div>
+    <div class="rank-label" id="rank-label"></div>
+    <div class="meter-wrap"><div class="meter-fill" id="meter-fill" style="width:0%"></div></div>
+    <div class="result-comment" id="result-comment"></div>
+  </div>
+  <div class="review-section" id="review-section" style="margin-top:20px;"></div>
+  <button class="btn-retry" onclick="restartQuiz()">もう一度挑戦する</button>
+</div>
+
+<footer><a href="https://shimazu-english.com">shimazu-english.com</a> · 鹿児島中央駅前 · 英語専門塾</footer>
+
+<script>
+const Q=[
+  {s:"Using informal language in a job application is not ( ) and may leave a poor impression on employers.",a:2,o:["flexible","obvious","appropriate","logical"],t:"就職応募書類でくだけた言葉を使うのは適切ではなく、雇用者に悪い印象を与えるかもしれない。",e:"<span class='fb-correct'>✓ 正解：appropriate</span>appropriate は「適切な」。It is not appropriate to do（〜するのは適切でない）の構文で使う。",tip:"💡 appropriate ↔ inappropriate（不適切な）"},
+  {s:"The young engineer proved that she was ( ) of solving complex technical problems completely on her own.",a:0,o:["capable","relevant","mutual","obvious"],t:"その若いエンジニアは、複雑な技術的問題を完全に独力で解決できることを証明した。",e:"<span class='fb-correct'>✓ 正解：capable</span>capable of doing で「〜できる・〜する能力がある」。able to do と同義だが、よりフォーマルな語。",tip:"💡 be capable of doing / capability（名詞）"},
+  {s:"The athlete's ( ) performance throughout the entire season earned her a well-deserved spot on the national team.",a:1,o:["flexible","consistent","inevitable","widespread"],t:"シーズン全体を通じた彼女の一貫したパフォーマンスが、国家チームへの当然の選出をもたらした。",e:"<span class='fb-correct'>✓ 正解：consistent</span>consistent は「一貫した・安定した」。consistent performance / consistent effort（一貫した努力）は頻出。",tip:"💡 consistent ↔ inconsistent / consistency（名詞）"},
+  {s:"The city is well known for its ( ) population, with people from over 50 different countries living there.",a:2,o:["logical","obvious","diverse","sufficient"],t:"その都市は50か国以上からの人々が住む多様な人口で知られている。",e:"<span class='fb-correct'>✓ 正解：diverse</span>diverse は「多様な・様々な」。diverse backgrounds / diverse opinions（多様な意見）は頻出。",tip:"💡 diverse / diversity（名詞）/ diverse perspectives（多様な視点）"},
+  {s:"Regular review sessions are one of the most ( ) ways to retain information and improve long-term memory.",a:3,o:["vital","precise","productive","effective"],t:"定期的な復習セッションは、情報を記憶し長期的な記憶を向上させるための最も効果的な方法の一つだ。",e:"<span class='fb-correct'>✓ 正解：effective</span>effective は「効果的な・有効な」。an effective method / effective communication（効果的なコミュニケーション）は頻出。",tip:"💡 effective / effectiveness（名詞）/ effectively（副詞）"},
+  {s:"A good manager should be ( ) enough to change plans quickly when unexpected situations arise in the workplace.",a:0,o:["flexible","obvious","sufficient","precise"],t:"優れたマネージャーは、職場で予期せぬ状況が生じたときに素早く計画を変えられるほど柔軟であるべきだ。",e:"<span class='fb-correct'>✓ 正解：flexible</span>flexible は「柔軟な・融通のきく」。a flexible approach（柔軟なアプローチ）/ flexible working hours（フレキシブルな勤務時間）は頻出。",tip:"💡 flexible ↔ rigid（硬直した）/ flexibility（名詞）"},
+  {s:"His ( ) desire to help others made him one of the most respected and admired volunteers in the entire community.",a:1,o:["inevitable","genuine","mutual","widespread"],t:"他者を助けたいという彼の心からの思いが、彼をコミュニティ全体で最も尊敬され称賛されるボランティアの一人にした。",e:"<span class='fb-correct'>✓ 正解：genuine</span>genuine は「本物の・心からの」。genuine interest / genuine concern（本当の関心）は頻出。",tip:"💡 genuine = sincere / a genuine effort（本物の努力）"},
+  {s:"With rapid advances in technology, it seems ( ) that many traditional jobs will disappear within the next decade.",a:2,o:["precise","productive","inevitable","capable"],t:"テクノロジーの急速な進歩により、将来的に多くの伝統的な仕事が10年以内になくなることは避けられないようだ。",e:"<span class='fb-correct'>✓ 正解：inevitable</span>inevitable は「避けられない・必然的な」。it seems inevitable that ～（〜は避けられないようだ）は頻出構文。",tip:"💡 inevitable / inevitably（副詞）/ inevitability（名詞）"},
+  {s:"Her ( ) argument convinced the committee that a significant change in the current policy was absolutely necessary.",a:3,o:["flexible","genuine","diverse","logical"],t:"彼女の論理的な主張が、委員会に現在の方針の大きな変更が絶対に必要だということを納得させた。",e:"<span class='fb-correct'>✓ 正解：logical</span>logical は「論理的な」。a logical argument / logical thinking（論理的な思考）は議論・説得系テーマで頻出。",tip:"💡 logical ↔ illogical / logically（副詞）"},
+  {s:"The successful partnership between the two organizations was built on a foundation of ( ) trust and respect.",a:0,o:["mutual","capable","widespread","obvious"],t:"2つの組織間の成功したパートナーシップは、相互の信頼と尊重の基盤の上に築かれた。",e:"<span class='fb-correct'>✓ 正解：mutual</span>mutual は「相互の・共通の」。mutual trust / mutual respect（相互尊重）/ mutual benefit（相互利益）は頻出。",tip:"💡 mutual trust / mutual respect / mutual agreement（相互合意）"},
+  {s:"When writing a report on a controversial topic, it is important to remain ( ) and present all sides fairly.",a:1,o:["flexible","objective","inevitable","relevant"],t:"論争的なトピックについてレポートを書くとき、客観的であり全ての側面を公平に提示することが大切だ。",e:"<span class='fb-correct'>✓ 正解：objective</span>objective は「客観的な」。remain objective（客観的でいる）/ an objective view（客観的な見方）は頻出。",tip:"💡 objective ↔ subjective（主観的な）"},
+  {s:"It was ( ) from the test scores that most students needed additional practice with complex grammar structures.",a:2,o:["sufficient","productive","obvious","diverse"],t:"テストの点数から、ほとんどの学生が複雑な文法構造の追加練習を必要としていることは明らかだった。",e:"<span class='fb-correct'>✓ 正解：obvious</span>obvious は「明らかな・明白な」。It is obvious that ～（〜であることは明らかだ）/ it was obvious from ～（〜から明らかだった）は頻出。",tip:"💡 obvious = clear / obviously（副詞）"},
+  {s:"The surgeon must make ( ) incisions to avoid any unnecessary damage to the healthy surrounding tissue.",a:3,o:["mutual","genuine","logical","precise"],t:"外科医は健康な周囲の組織に不必要なダメージを与えないよう、正確な切開をしなければならない。",e:"<span class='fb-correct'>✓ 正解：precise</span>precise は「正確な・精密な」。precise instructions / precise measurements（正確な測定）は科学・技術系テーマで頻出。",tip:"💡 precise = accurate / precision（名詞）"},
+  {s:"Working in a quiet and organized environment tends to make employees significantly more ( ) during the day.",a:0,o:["productive","inevitable","capable","widespread"],t:"静かで整理された環境での作業は、従業員を日中大幅により生産的にする傾向がある。",e:"<span class='fb-correct'>✓ 正解：productive</span>productive は「生産的な」。a productive meeting（生産的な会議）/ productive use of time（時間の有効活用）は頻出。",tip:"💡 productive ↔ unproductive / productivity（名詞）"},
+  {s:"Please only include information that is directly ( ) to the topic in your essay to keep it focused and clear.",a:1,o:["obvious","relevant","flexible","sufficient"],t:"エッセイが焦点を絞ったわかりやすいものになるよう、トピックに直接関連する情報のみを含めてください。",e:"<span class='fb-correct'>✓ 正解：relevant</span>relevant は「関連のある・適切な」。relevant information / relevant experience（関連経験）は頻出。",tip:"💡 relevant ↔ irrelevant（無関係の）/ relevant to ～（〜に関連する）"},
+  {s:"When conducting research, it is essential to use ( ) sources such as peer-reviewed journals and official reports.",a:2,o:["diverse","precise","reliable","obvious"],t:"研究をする際は、査読付きジャーナルや公式レポートなどの信頼できる情報源を使うことが不可欠だ。",e:"<span class='fb-correct'>✓ 正解：reliable</span>reliable は「信頼できる」。a reliable source / reliable data（信頼できるデータ）は学術・研究系テーマで頻出。",tip:"💡 reliable ↔ unreliable / reliability（名詞）"},
+  {s:"The organization does not currently have ( ) funding to carry out all the programs it has planned for this year.",a:3,o:["mutual","consistent","logical","sufficient"],t:"その組織は今年計画しているすべてのプログラムを実施するための十分な資金が現在ない。",e:"<span class='fb-correct'>✓ 正解：sufficient</span>sufficient は「十分な」。enough と同義だが、よりフォーマルな語。sufficient resources / sufficient time（十分な時間）は頻出。",tip:"💡 sufficient = enough（よりフォーマル）/ insufficient（不十分な）"},
+  {s:"Getting regular feedback from customers is ( ) for any company that wants to genuinely improve its services.",a:0,o:["vital","obvious","flexible","mutual"],t:"顧客から定期的なフィードバックを得ることは、本当にサービスを改善したいどの企業にとっても不可欠だ。",e:"<span class='fb-correct'>✓ 正解：vital</span>vital は「不可欠な・極めて重要な」。crucial / essential と同義。vital information / play a vital role（重要な役割を果たす）は頻出。",tip:"💡 vital = essential / crucial / play a vital role"},
+  {s:"The use of electric vehicles has become more ( ) as battery technology improves and purchase prices fall.",a:1,o:["precise","widespread","sufficient","relevant"],t:"電気自動車の使用は、バッテリー技術が向上し購入価格が下がるにつれてより広く普及してきている。",e:"<span class='fb-correct'>✓ 正解：widespread</span>widespread は「広く普及した・一般的な」。widespread use / widespread support（幅広い支持）は頻出。",tip:"💡 widespread / become widespread（広く普及する）"},
+  {s:"The number of people using online shopping platforms has increased ( ) over the past decade worldwide.",a:2,o:["gradually","barely","dramatically","rarely"],t:"オンラインショッピングプラットフォームを使う人の数は、過去10年で世界中で劇的に増加した。",e:"<span class='fb-correct'>✓ 正解：dramatically</span>dramatically は「劇的に」。increase / decrease dramatically（劇的に増減する）は変化を表す文脈で頻出。",tip:"💡 dramatically = significantly / drastically（劇的に）"},
+  {s:"After years of dedicated practice and study, she ( ) became fluent enough to give speeches entirely in French.",a:3,o:["rarely","suddenly","frequently","eventually"],t:"何年もの献身的な練習と勉強の末、彼女はついに完全にフランス語でスピーチができるほど流暢になった。",e:"<span class='fb-correct'>✓ 正解：eventually</span>eventually は「最終的に・ついに」。after years of ～という文脈と相性が良い。",tip:"💡 eventually = finally / in the end（最終的に）"},
+  {s:"The scholarship program is designed ( ) for students from low-income families who demonstrate strong academic potential.",a:0,o:["primarily","rarely","eventually","equally"],t:"その奨学金プログラムは主として、強い学業的可能性を示す低所得家庭の学生のために設計されている。",e:"<span class='fb-correct'>✓ 正解：primarily</span>primarily は「主に・主として」。mainly / mostly と同義だが、よりフォーマルな語。",tip:"💡 primarily = mainly / mostly（より改まった語）"},
+  {s:"Students who ( ) review their notes after class are far more likely to perform well on their final exams.",a:1,o:["rarely","consistently","immediately","gradually"],t:"授業後に定期的にノートを復習する学生は、期末試験で良い成績を収める可能性がはるかに高い。",e:"<span class='fb-correct'>✓ 正解：consistently</span>consistently は「一貫して・常に」。consistently high performance（一貫して高いパフォーマンス）は頻出。",tip:"💡 consistently = always / on a regular basis（一貫して）"},
+  {s:"Compared with other major cities, the cost of public transportation in Tokyo is ( ) affordable for daily commuters.",a:2,o:["gradually","barely","relatively","rarely"],t:"他の主要都市と比べて、東京の公共交通機関の料金は毎日通勤する人にとって比較的手頃だ。",e:"<span class='fb-correct'>✓ 正解：relatively</span>relatively は「比較的・相対的に」。compared to ～（〜と比べて）という文脈と一緒に使われることが多い。",tip:"💡 relatively = comparatively / relatively easy（比較的簡単な）"},
+  {s:"It is becoming ( ) important for job seekers to develop strong digital skills in today's fast-changing workplace.",a:3,o:["rarely","gradually","occasionally","increasingly"],t:"今日の急速に変化する職場では、就職希望者が強いデジタルスキルを伸ばすことがますます重要になってきている。",e:"<span class='fb-correct'>✓ 正解：increasingly</span>increasingly は「ますます・だんだんと」。It is becoming increasingly ～（ますます〜になっている）は頻出構文。",tip:"💡 increasingly = more and more / increasingly important"},
+  {s:"The construction of the new bridge is expected to take ( ) two years and cost around fifteen million dollars.",a:0,o:["approximately","rarely","largely","equally"],t:"新しい橋の建設にはおよそ2年かかり、約1500万ドルの費用がかかると予想される。",e:"<span class='fb-correct'>✓ 正解：approximately</span>approximately は「およそ・約」。about と同義だが、よりフォーマルな語。数字の前に置く副詞。",tip:"💡 approximately = about / around（よりフォーマル）"},
+  {s:"The success of the environmental awareness campaign was ( ) due to the dedicated efforts of young student volunteers.",a:1,o:["rarely","largely","gradually","barely"],t:"その環境啓発キャンペーンの成功は主に、献身的な若い学生ボランティアの努力によるものだった。",e:"<span class='fb-correct'>✓ 正解：largely</span>largely は「主に・大部分は」。due to ～（〜のおかげで）という原因の文脈と組み合わせることが多い。",tip:"💡 largely = mainly / primarily（主に）"},
+  {s:"Before submitting your report, please make sure you have ( ) checked all the facts, data, and references.",a:2,o:["gradually","barely","thoroughly","rarely"],t:"レポートを提出する前に、すべての事実・データ・参考文献を徹底的に確認したことを確認してください。",e:"<span class='fb-correct'>✓ 正解：thoroughly</span>thoroughly は「徹底的に・完全に」。check thoroughly / read thoroughly（徹底的に読む）は学術・ビジネス系で頻出。",tip:"💡 thoroughly = completely / in detail（徹底的に）"},
+  {s:"All members of the project team are ( ) responsible for ensuring the quality of the final submitted report.",a:3,o:["approximately","rarely","gradually","equally"],t:"プロジェクトチームのすべてのメンバーは最終提出レポートの品質を確保することについて等しく責任がある。",e:"<span class='fb-correct'>✓ 正解：equally</span>equally は「等しく・同様に」。equally important / equally responsible（等しく責任がある）は頻出。",tip:"💡 equally / equally important（同様に重要な）/ treat equally（平等に扱う）"},
+  {s:"The government is actively promoting the development and use of ( ) energy sources to reduce carbon emissions.",a:0,o:["sustainable","harmful","temporary","obvious"],t:"政府は炭素排出量を削減するために持続可能なエネルギー源の開発と使用を積極的に促進している。",e:"<span class='fb-correct'>✓ 正解：sustainable</span>sustainable は「持続可能な」。sustainable energy / sustainable development（持続可能な開発）は環境系テーマで最重要語。",tip:"💡 sustainable / sustainability（名詞）/ sustainable development"}
+];
+
+let cur=0,score=0,wrong=[],ans=false;
+function startQuiz(){cur=0;score=0;wrong=[];ans=false;document.getElementById('screen-start').classList.remove('active');document.getElementById('screen-quiz').classList.add('active');render()}
+function render(){
+  ans=false;const q=Q[cur],t=Q.length;
+  document.getElementById('progress-count').textContent=`${cur+1} / ${t}`;
+  document.getElementById('score-live').textContent=`正解: ${score}`;
+  document.getElementById('progress-bar').style.width=`${(cur/t)*100}%`;
+  document.getElementById('q-tag').textContent=`QUESTION ${cur+1}`;
+  document.getElementById('q-sentence').innerHTML=q.s.replace('( )','<span class="blank">(　　　)</span>');
+  document.getElementById('q-translation').textContent=q.t;
+  const g=document.getElementById('options-grid');g.innerHTML='';
+  ['A','B','C','D'].forEach((l,i)=>{const b=document.createElement('button');b.className='opt-btn';b.innerHTML=`<span class="opt-label">${l}</span> ${q.o[i]}`;b.onclick=()=>pick(i);g.appendChild(b);});
+  document.getElementById('feedback-box').classList.remove('show');document.getElementById('feedback-box').innerHTML='';
+  document.getElementById('btn-next').classList.remove('show');
+  document.getElementById('btn-next').textContent=cur+1===t?'結果を見る':'次の問題 →';
+}
+function pick(sel){
+  if(ans)return;ans=true;const q=Q[cur];
+  document.querySelectorAll('.opt-btn').forEach((b,i)=>{b.disabled=true;if(i===q.a)b.classList.add('correct');else if(i===sel&&sel!==q.a)b.classList.add('wrong');});
+  const fb=document.getElementById('feedback-box');
+  if(sel===q.a){score++;document.getElementById('score-live').textContent=`正解: ${score}`;fb.innerHTML=`${q.e}<span class='fb-tip'>${q.tip}</span>`;}
+  else{wrong.push({q,sel});fb.innerHTML=`<span class='fb-wrong'>✗ あなたの答え：${q.o[sel]}</span>${q.e}<span class='fb-tip'>${q.tip}</span>`;}
+  fb.classList.add('show');document.getElementById('btn-next').classList.add('show');
+}
+function nextQuestion(){cur++;if(cur>=Q.length)result();else render()}
+function result(){
+  document.getElementById('screen-quiz').classList.remove('active');document.getElementById('screen-result').classList.add('active');
+  const t=Q.length,p=Math.round((score/t)*100);
+  let rank,rc,rb,com;
+  if(p>=90){rank='S';rc='#f0b429';rb='rgba(240,180,41,0.2)';com='英検2級の形容詞・副詞語彙は十分なレベルです。準1級レベルの語彙強化に進みましょう。';}
+  else if(p>=77){rank='A';rc='#22c55e';rb='rgba(34,197,94,0.2)';com='英検2級合格圏内のレベルです。間違えた形容詞・副詞を例文ごと復習して完成度を高めましょう。';}
+  else if(p>=60){rank='B';rc='#3b82f6';rb='rgba(59,130,246,0.2)';com:'もう少しで合格レベルです。紛らわしい語のニュアンスの違いを意識して覚え直しましょう。';}
+  else{rank='C';rc='#ef4444';rb='rgba(239,68,68,0.2)';com='形容詞・副詞の語彙強化が必要です。反意語・類義語をセットで覚えることを推奨します。';}
+  document.getElementById('result-rank').textContent=rank;document.getElementById('result-rank').style.color=rc;
+  document.getElementById('result-score').textContent=`${t}問中 ${score}問正解（正答率 ${p}%）`;
+  const rl=document.getElementById('rank-label');
+  rl.textContent=rank==='S'?'優秀':rank==='A'?'合格圏内':rank==='B'?'もう少し':'要強化';
+  rl.style.background=rb;rl.style.color=rc;rl.style.border=`1px solid ${rc}`;
+  document.getElementById('result-comment').textContent=com;
+  const fill=document.getElementById('meter-fill');fill.style.background=rc;setTimeout(()=>{fill.style.width=p+'%'},100);
+  const rev=document.getElementById('review-section');
+  if(!wrong.length){rev.innerHTML='<div style="text-align:center;color:#22c55e;font-weight:700;padding:20px 0;">🎉 全問正解！素晴らしい！</div>';}
+  else{
+    let h=`<div class="review-section"><h3>✗ 間違えた問題（${wrong.length}問）</h3>`;
+    wrong.forEach(({q,sel})=>{const s=q.s.replace('( )',`<span class="fb-answer">${q.o[q.a]}</span>`);h+=`<div class="review-item"><div class="review-sentence">${s}</div><div><span class="review-wrong">${q.o[sel]}</span><span class="review-answer">✓ ${q.o[q.a]}</span></div><div class="review-tip">${q.tip}</div></div>`;});
+    h+='</div>';rev.innerHTML=h;
+  }
+}
+function restartQuiz(){document.getElementById('screen-result').classList.remove('active');document.getElementById('screen-start').classList.add('active')}
+</script>
+</body>
+</html>
